@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function TicketStatus() {
   const navigate = useNavigate();
+  
   const [ticketId, setTicketId] = useState('');
 
 
