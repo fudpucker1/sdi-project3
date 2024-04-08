@@ -9,12 +9,14 @@ import TicketSubmission from './Pages/TicketSubmission';
 import PostSubmission from './Pages/PostSubmission';
 import TicketInfo from './Pages/TicketInfo';
 import FAQ from './Pages/FAQ';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
     <div className="App">
-      <h1>HelpDeskHero</h1>
-
+      <h1 className='text-center '>HelpDeskHero</h1>
+    
+    
       <nav>
         <ul>
             <li><Link to="/home">Home</Link></li>
