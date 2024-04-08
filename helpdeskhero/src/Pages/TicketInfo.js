@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 function TicketInfo() {
-  let { id } = useParams();
+  const { id } = useParams();
+
   const [ticket, setTicket] = useState(null);
   const [assignedTo, setAssignedTo] = useState('');
   const [updates, setUpdates] = useState('');
@@ -27,7 +28,7 @@ function TicketInfo() {
   return (
     <div>
       <h1>Welcome to the Ticket Info Page. Your ticket ID is: {id}</h1>
-      
+
       <h2>Ticket Details</h2>
       <p>Name: {ticket.name}</p>
       <p>Email: {ticket.email}</p>
