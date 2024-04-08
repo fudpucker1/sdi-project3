@@ -1,27 +1,18 @@
 # sdi-project3
 
-
-
-
-
-
-
-
+https://excalidraw.com/#json=CXQTZX7CMp1Cb_GL8t0Ex,vjMRAeVWu0QhdHpX8Ydi7Q
 
 Problem Statement:
 
 - We are relying on hand reciepts and paper notices in order to track equipment and help-desk tickets. Our current solution is segmented and requires access to multiple databases in order to properly track tasks.
 
 Solution:
+
 - Our proposed solution is to create an all encompassing application that will be a one-stop-shop for all things IT, help-desk, and ticketing issues.
 
 Why:
+
 - This solution fixes the issues of having to keep track of paper tasks, account/database accesses, and should solve many of the human-error issues that we come across regularly. Our solution also allows easy cross-referencing of equipment and tickets.
-
-
-
-
-
 
 USER STORIES
 
@@ -49,10 +40,6 @@ AS EMILY
 WHEN I OPEN A TASK
 THEN I CAN UPDATE THE INFORMATION
 SO THAT THE TASK MAY BE WORKED ON BY OTHERS OR TO BE CLOSED OUT AND COMPLETED
-
-
-
-
 
 AS EMILY
 WHEN I GO TO WORK
