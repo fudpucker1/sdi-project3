@@ -5,7 +5,7 @@ function PostSubmission() {
   // this contains the routing URL location
   const location = useLocation();
   // this contains the state passed from <TicketSubmission/> for the TicketId
-  const TicketId = 100;
+  const TicketId = location.state.TicketId;;
 
   return (
     <div style={{paddingBottom: '50%'}}>
