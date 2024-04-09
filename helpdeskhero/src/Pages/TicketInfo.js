@@ -9,7 +9,7 @@ function TicketInfo() {
   const [updates, setUpdates] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/tickets/${id}`)
+    fetch(`http://localhost:8080/tickets/${id}`)
       .then(response => response.json())
       .then(data => setTicket(data))
       .catch(error => console.error('Error:', error));
@@ -30,9 +30,9 @@ function TicketInfo() {
       <h1>Welcome to the Ticket Info Page. Your ticket ID is: {id}</h1>
 
       <h2>Ticket Details</h2>
-      <p>Name: {ticket.name}</p>
-      <p>Email: {ticket.email}</p>
-      <p>Equipment Type: {ticket.equipment}</p>
+      <p>Name: {ticket.customer_name}</p>
+      <p>Email: {ticket.customer_email}</p>
+      <p>Equipment Type: {ticket.equipment_name}</p> {/* Display equipment name */}
       <p>Description: {ticket.description}</p>
       <p>Priority: {ticket.severity}</p>
 
