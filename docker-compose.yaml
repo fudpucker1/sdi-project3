@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  front_end:
+    build: helpdeskhero/
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+
   api:
     build: api/
     ports:

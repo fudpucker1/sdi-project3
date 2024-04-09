@@ -8,25 +8,26 @@ export default function Login() {
   const handleSubmit = () => {
     const data = {
       username: userName,
-      password: userPassword
-    }
+      password: userPassword,
+    };
+    console.log(JSON.stringify(data));
     setSubmitStatus(true);
-    fetch('http://localhost:8080/login', {
+    fetch("http://localhost:8080/login", {
       method: "POST",
-      body: JSON.stringify(data)
-    })
-    .then(res => {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then((res) => {
       if (res.status === 200) {
-        console.log('it worked!')
-      } else{
-        alert(res)
+        document.cookie = res.cookies
+        // window.location.href = "http://localhost:3000/staff-home";
+      } else {
+        alert(JSON.stringify(res));
       }
-    })
+    });
+    console.log(document.cookie)
   };
 
-  const handleNewAccount = () => {
-
-  }
+  const handleNewAccount = () => {};
 
   return (
     <div className="App">
@@ -51,7 +52,9 @@ export default function Login() {
           </label>
           <input type="button" value="Submit" onClick={() => handleSubmit()} />
         </form>
-        <button type='button' onClick={() => handleNewAccount()}>Create New Account</button>
+        <button type="button" onClick={() => handleNewAccount()}>
+          Create New Account
+        </button>
       </header>
     </div>
   );

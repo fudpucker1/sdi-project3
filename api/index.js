@@ -17,15 +17,10 @@ app.use(
     httpOnly: true,
     sameSite: "strict",
     secret: process.env.secret,
+    maxAge: 24 * 60 * 60 * 1000,
   })
 );
 
-const user_info = [
-  {
-    username: "chuck",
-    password: "password"
-  }
-]
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -33,23 +28,35 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.body.username}`)
+    .where({
+      username: `${req.body.username}`,
+    })
     .then((user_info) => {
-      if (user_info === null) {
+      console.log(req.body.username)
+      if (user_info.length === 0) {
         res.status(404).send("User/Password not found");
-      } else if (user_info.password !== req.password) {
+      } else if (user_info[0].password !== req.body.password) {
+        console.log(user_info);
         res.status(404).send("User/Password not found");
       } else {
         req.session.username = req.body.username;
-        res.status(200).send("Logging in!").cookie();
+        res
+          .cookie("user_id", user_info[0].user_id, {
+            httpOnly: true,
+            // sameSite: true,
+            maxAge: 24 * 60 * 60 * 1000,
+            path: "/",
+          })
+          .status(200)
+          .send("Logging in!");
       }
     });
 });
 
-app.post('/newlogin', (req, res) => {
+app.post("/newlogin", (req, res) => {
   knex("help_desk_users")
     .select("*")
     .where(`username = ${req.body.username}`)
@@ -73,17 +80,13 @@ app.post('/newlogin', (req, res) => {
     });
 });
 
-app.patch('/updatepassword', (req, res) => {
+app.patch("/updatepassword", (req, res) => {
   req.session.username = req.body.username;
   knex("help_desk_users")
-    .where(`username = ${req.username}`)
-    .update("password", req.password);
+    .where(`username = ${req.body.username}`)
+    .update("password", req.body.password);
   res.status(201).send("Password updated").cookie();
 });
-
-app.get('/', (req, res) => {
-  res.send("Express is up and running")
-})
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
