@@ -13,6 +13,7 @@ function TicketSubmission() {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('');
   const [serialFound, setSerialFound] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   // return eqiupment_id based on serial number
   const serialLookup = async (event) => {
@@ -73,6 +74,7 @@ function TicketSubmission() {
       }
 
       const data = await response.json();
+      setSubmit(true)
       console.log(equipmentID);
       navigate('/post-submission', { state: { TicketId: data.ticket_id } });
     } catch (error) {
@@ -81,8 +83,25 @@ function TicketSubmission() {
     }
   };
 
+   // this contains the routing URL location
+   const location = useLocation();
+   // this contains the state passed from <TicketSubmission/> for the TicketId
+   // const TicketId = location.state.TicketId;
+   const TicketId = 100;
+
+   const GoHome = () => {
+     setSubmit(false)
+     navigate('/home')
+   }
+
+   const NewTicket = () => {
+     setSubmit(false)
+     console.log(submit)
+   }
+
   return (
-    <div style={{paddingBottom: '50%'}}>
+    (!submit ?
+      <div style={{paddingBottom: '50%'}}>
       <h1 style={{paddingBottom: '10px'}}>Ticket Submission Page</h1>
       <form onSubmit={handleSubmit}>
         <div className = 'Part1' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -114,7 +133,7 @@ function TicketSubmission() {
         </label>
         </div>
         <button className="btn btn-dark" onClick={serialLookup}>Search</button>
-<br/>
+        <br/>
         <div className = 'Part2' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
         <label style={{ marginBottom: 25, marginTop: 25}}>
             <textarea placeholder="Problem Description" style={{ borderRadius: 5, textAlign: 'center', paddingLeft: 60, paddingRight: 60 }} value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -135,6 +154,23 @@ function TicketSubmission() {
         <button className="btn btn-dark" type="submit" onSubmit={() => handleSubmit()}>Submit</button>
       </form>
     </div>
+
+      :
+    <div style={{paddingBottom: '50%'}}>
+      <h1>Welcome to the Post Submission Page</h1>
+      <br></br>
+      <h4>Your Ticket Id is {TicketId}. Use your Ticket Id to make any updates to your ticket.</h4>
+      <h4>You will receive an automated email from helpdeskhero@spacemail.gov.</h4>
+      <h4>You may now close this window.</h4>
+      <br></br>
+      <br></br>
+
+      <div className = 'Buttons' style={{display: 'flex', justifyContent: 'center', columnGap: '50px'}}>
+      <button type="button" className="btn btn-dark btn-lg" onClick = {() => GoHome()}>Go Home</button>
+      <button type="button" className="btn btn-dark btn-lg" onClick = {() => NewTicket()}>Submit New Ticket</button>
+      </div>
+    </div>
+    )
   );
 }
 
