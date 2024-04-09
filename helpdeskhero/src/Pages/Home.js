@@ -10,6 +10,7 @@ function Home() {
       <button onClick={() => navigate('/submit-ticket')}>Submit a Ticket</button>
       <button onClick={() => navigate('/ticket-status')}>Ticket Status</button>
       <button onClick={() => navigate('/faq')}>FAQs</button>
+      <button onClick={() => navigate('/login')}>LOGIN</button>
     </div>
   );
 }

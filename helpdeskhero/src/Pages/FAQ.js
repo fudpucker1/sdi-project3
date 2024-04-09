@@ -1,11 +1,11 @@
 import React from 'react';
 
-function FAQ() {
+export default function FAQ() {
   return (
     <div>
       <h1>Welcome to the FAQ Page</h1>
       <h2>Frequently Asked Questions</h2>
-      <ul>
+      <ul style= {{ listStyleType: "none" }}>
         <li>
           <h3>How do I submit a new IT ticket?</h3>
           <p>You can submit a new IT ticket by going to the "Submit Ticket" page and filling out the form with details about your issue.</p>
@@ -30,5 +30,3 @@ function FAQ() {
     </div>
   );
 }
-
-export default FAQ;
