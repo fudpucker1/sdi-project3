@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.post('/login', (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.body.username}`)
+    .where('username', '=', req.body.username)
     .then((user_info) => {
       if (user_info === null) {
         res.status(404).send("User/Password not found");
@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
 app.post('/newlogin', (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.body.username}`)
+    .where('username', '=', req.body.username)
     .then((user) => {
       if (user === null) {
         knex("help_desk_users").insert({
