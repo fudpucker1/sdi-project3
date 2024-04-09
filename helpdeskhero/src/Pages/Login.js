@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 export default function Login() {
   const [userName, setUserName] = useState("");
@@ -10,28 +10,29 @@ export default function Login() {
       username: userName,
       password: userPassword,
     };
-    console.log(JSON.stringify(data));
     setSubmitStatus(true);
     fetch("http://localhost:8080/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    }).then((res) => {
+      credentials: "include",
+    }).then(async (res) => {
       if (res.status === 200) {
-        document.cookie = res.cookies
-        // window.location.href = "http://localhost:3000/staff-home";
+        window.location.href = "http://localhost:3000/staff-home";
       } else {
         alert(JSON.stringify(res));
       }
     });
-    console.log(document.cookie)
+    console.log(document.cookie);
   };
 
-  const handleNewAccount = () => {};
+  const handleNewAccount = () => {
+    window.location.href = "http://localhost:3000/new-account";
+  };
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header>
         <p>The login page is up and running.</p>
         <form>
           <label>

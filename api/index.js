@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const port = 8080;
@@ -9,22 +9,31 @@ const knex = require("knex")(
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:3000"
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cookieSession({
-    name: "user_session",
+    username: "user_session",
+    // secure: true,
     httpOnly: true,
-    sameSite: "strict",
+    // sameSite: "strict",
     secret: process.env.secret,
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/login",
+
   })
 );
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  // res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
@@ -35,7 +44,7 @@ app.post("/login", (req, res) => {
       username: `${req.body.username}`,
     })
     .then((user_info) => {
-      console.log(req.body.username)
+      console.log(req.body.username);
       if (user_info.length === 0) {
         res.status(404).send("User/Password not found");
       } else if (user_info[0].password !== req.body.password) {
@@ -43,15 +52,7 @@ app.post("/login", (req, res) => {
         res.status(404).send("User/Password not found");
       } else {
         req.session.username = req.body.username;
-        res
-          .cookie("user_id", user_info[0].user_id, {
-            httpOnly: true,
-            // sameSite: true,
-            maxAge: 24 * 60 * 60 * 1000,
-            path: "/",
-          })
-          .status(200)
-          .send("Logging in!");
+        res.status(200).cookie("userid", "1").send("Loggin in");
       }
     });
 });
