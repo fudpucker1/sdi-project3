@@ -11,7 +11,7 @@ export default function Login() {
       password: userPassword
     }
     setSubmitStatus(true);
-    fetch('http://localhost/8080/login', {
+    fetch('http://localhost:8080/login', {
       method: "POST",
       body: JSON.stringify(data)
     })

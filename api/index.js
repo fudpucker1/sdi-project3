@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.post('/login', (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.username}`)
+    .where(`username = ${req.body.username}`)
     .then((user_info) => {
       if (user_info === null) {
         res.status(404).send("User/Password not found");
@@ -49,8 +49,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-{/* <li><Link to="/login">LOGIN</Link></li>
-<Route path="/login" element={<Login/>} /> */}
 app.post('/newlogin', (req, res) => {
   knex("help_desk_users")
     .select("*")
@@ -82,6 +80,10 @@ app.patch('/updatepassword', (req, res) => {
     .update("password", req.password);
   res.status(201).send("Password updated").cookie();
 });
+
+app.get('/', (req, res) => {
+  res.send("Express is up and running")
+})
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);

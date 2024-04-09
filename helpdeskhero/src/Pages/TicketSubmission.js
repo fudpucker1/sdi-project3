@@ -34,12 +34,12 @@ function TicketSubmission() {
         },
         body: JSON.stringify(ticket),
       });
-  
+
       // check if the POST was successful
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       // grab the POST response data, which will be the TicketId
       const data = await response.json();
       console.log(data);
@@ -48,13 +48,13 @@ function TicketSubmission() {
     }
 
     // navigate to the ticket post submission page
-    navigate('/post-submission', { state: { TicketId: data.TicketId } });
+    // navigate('/post-submission', { state: { TicketId: data.TicketId } });
   };
 
   return (
     <div>
       <h1>Welcome to the Ticket Submission Page</h1>
-      <form style={{ display: 'flex', flexDirection: 'column'}} 
+      <form style={{ display: 'flex', flexDirection: 'column'}}
             onSubmit={() => handleSubmit()}>
 
         <label>Name:
