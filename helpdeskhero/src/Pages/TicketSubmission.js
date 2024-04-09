@@ -82,20 +82,24 @@ function TicketSubmission() {
   };
 
   return (
-    <div>
-      <h1>Welcome to the Ticket Submission Page</h1>
+    <div style={{paddingBottom: '50%'}}>
+      <h1 style={{paddingBottom: '10px'}}>Ticket Submission Page</h1>
       <form onSubmit={handleSubmit}>
-        <label>Name:
-          <input type="text" value={username} onChange={(e) => setUserName(e.target.value)} />
-        </label>
+        <div className = 'Part1' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
 
-        <label>Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <label style={{ marginBottom: 25}}>
+          <input type="text" placeholder="Enter Name" style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }} value={username} onChange={(e) => setUserName(e.target.value)} />
         </label>
+        <br/>
 
-        <label>Ticket Type:
-          <select value={ticketType} onChange={(e) => setTicketType(e.target.value)}>
-            <option value="">Select...</option>
+        <label style={{ marginBottom: 25}}>
+          <input type="email" placeholder="Enter Offical Email" style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }} value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <br/>
+
+        <label style={{ marginBottom: 25}}>
+          <select value={ticketType} style={{ display: 'flex', flexDirection: 'column', paddingLeft: 70, borderRadius: 5, textAlign: 'center' }} onChange={(e) => setTicketType(e.target.value)}>
+            <option value="">Ticket Type</option>
             <option value="1">Technical Issue</option>
             <option value="2">User Support</option>
             <option value="3">Software Enhancement</option>
@@ -103,20 +107,22 @@ function TicketSubmission() {
             <option value="5">Network Connectivity</option>
           </select>
         </label>
-
-        <label>Serial Number:
-          <input type="text" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
+          <br/>
+        <label style={{ marginBottom: 25}}>
+            <input style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }} type="text" placeholder="Serial Number" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
           {serialFound && <span style={{ color: 'green' }}>✓</span>} {/* Display green checkmark if serial found */}
         </label>
-        <button onClick={serialLookup}>Search</button>
-
-        <label>Problem Description:
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+        </div>
+        <button className="btn btn-dark" onClick={serialLookup}>Search</button>
+<br/>
+        <div className = 'Part2' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <label style={{ marginBottom: 25, marginTop: 25}}>
+            <textarea placeholder="Problem Description" style={{ borderRadius: 5, textAlign: 'center', paddingLeft: 60, paddingRight: 60 }} value={description} onChange={(e) => setDescription(e.target.value)} />
         </label>
 
-        <label>Priority:
-          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-            <option value="">Select...</option>
+        <label style={{ marginBottom: 25, marginRight: 5}}>
+            <select style={{ display: 'flex', flexDirection: 'column', paddingLeft: 70, paddingRight: 70, borderRadius: 5, textAlign: 'center' }} value={priority} onChange={(e) => setPriority(e.target.value)}>
+            <option value="">Priority Level</option>
             <option value="1">Low</option>
             <option value="2">Medium</option>
             <option value="3">High</option>
@@ -124,8 +130,9 @@ function TicketSubmission() {
             <option value="5">Emergency</option>
           </select>
         </label>
+        </div>
 
-        <button type="submit">Submit</button>
+        <button className="btn btn-dark" type="submit" onSubmit={() => handleSubmit()}>Submit</button>
       </form>
     </div>
   );
