@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.post('/login', (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.body.username}`)
+    .where('username', '=', req.body.username)
     .then((user_info) => {
       if (user_info === null) {
         res.status(404).send("User/Password not found");
@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
 app.post('/newlogin', (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.body.username}`)
+    .where('username', '=', req.body.username)
     .then((user) => {
       if (user === null) {
         knex("help_desk_users").insert({
@@ -134,6 +134,40 @@ app.patch('/updatepassword', (req, res) => {
 app.get('/', (req, res) => {
   res.send("Express is up and running")
 })
+
+// Route to fetch tickets
+app.get("/tickets", (req, res) => {
+  knex("tickets")
+    .select("*")
+    .then((tickets) => {
+      res.status(200).json(tickets);
+    })
+    .catch((error) => {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+app.get("/tickets/:id", (req, res) => {
+  const { id } = req.params;
+
+  knex("tickets")
+    .select("*")
+    .where({ id: id })
+    .then((ticket) => {
+      if (ticket.length === 0) {
+        // If no ticket found with the provided ID
+        res.status(404).json({ error: "Ticket not found" });
+      } else {
+        // If ticket found, return it
+        res.status(200).json(ticket[0]);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching ticket:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);

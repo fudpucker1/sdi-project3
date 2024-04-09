@@ -9,12 +9,14 @@ import TicketSubmission from './Pages/TicketSubmission';
 import PostSubmission from './Pages/PostSubmission';
 import TicketInfo from './Pages/TicketInfo';
 import FAQ from './Pages/FAQ';
+import 'bootstrap/dist/css/bootstrap.css';
 import Login from './Pages/Login';
 
 export default function App() {
   return (
     <div className="App">
-      <h1>HelpDeskHero</h1>
+      <h1 className='text-center '>HelpDeskHero</h1>
+
 
       <nav>
         <ul style= {{ listStyleType: "none" }} >
@@ -34,7 +36,7 @@ export default function App() {
         <Route path="/home" element={<Home/>} />
         <Route path="/ticket-status" element={<TicketStatus/>} />
         <Route path="/staff-home" element={<StaffHome/>} />
-        <Route path="/all-tickets" element={<AllTickets/>} />
+        <Route path="/all-tickets" element={<AllTickets />} />
         <Route path="/submit-ticket" element={<TicketSubmission/>} />
         <Route path="/post-submission" element={<PostSubmission/> } />
         <Route path="/ticket-info/:id" element={<TicketInfo/>} />
