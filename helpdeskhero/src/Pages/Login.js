@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
+import { loggedInContext } from './Logged-In-context'
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
-
+  const { loggedIn , setLoggedIn } = useContext(loggedInContext)
   const handleSubmit = () => {
     const data = {
       username: userName,
@@ -23,7 +24,7 @@ export default function Login() {
         alert(JSON.stringify(res));
       }
     });
-    console.log(document.cookie);
+    setLoggedIn(true);
   };
 
   const handleNewAccount = () => {

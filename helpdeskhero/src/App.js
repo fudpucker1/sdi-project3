@@ -11,8 +11,8 @@ import TicketInfo from "./Pages/TicketInfo";
 import FAQ from "./Pages/FAQ";
 import Login from "./Pages/Login";
 import NewAccount from "./Pages/NewAccount";
-import { LoggedInProvider } from "./Pages/Logged-In-context";
 import 'bootstrap/dist/css/bootstrap.css';
+import { ContextLayout } from './Pages/Logged-In-context'
 
 export default function App() {
   return (
@@ -46,7 +46,6 @@ export default function App() {
             </li>
           </ul>
         </nav>
-
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/ticket-status" element={<TicketStatus />} />
@@ -59,6 +58,7 @@ export default function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+
     </div>
   );
 }
