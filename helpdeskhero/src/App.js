@@ -12,6 +12,8 @@ import FAQ from "./Pages/FAQ";
 import Login from "./Pages/Login";
 import NewAccount from "./Pages/NewAccount";
 import { LoggedInProvider } from "./Pages/Logged-in-context";
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export default function App() {
   return (

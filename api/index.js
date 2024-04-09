@@ -60,7 +60,7 @@ app.post("/login", (req, res) => {
 app.post("/newlogin", (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where(`username = ${req.body.username}`)
+    .where('username', '=', req.body.username)
     .then((user) => {
       if (user === null) {
         knex("help_desk_users").insert({
@@ -81,12 +81,100 @@ app.post("/newlogin", (req, res) => {
     });
 });
 
+// API END POINT TO CREATE USER TICKET
+app.post('/createticket', (req, res) => {
+  const { ticket_type_id, priority_level_id, equipment_id, description, customer_name, customer_email } = req.body;
+
+  knex('tickets').insert({
+    ticket_type_id,
+    priority_level_id,
+    equipment_id,
+    description,
+    customer_name,
+    customer_email
+  })
+  .then(() => {
+    return knex('tickets')
+      .where('customer_email', customer_email)
+      .orderBy('create_date', 'desc')
+      .first('ticket_id')
+    })
+  .then(({ ticket_id }) => {
+    if (ticket_id) {
+      res.status(201).json({ ticket_id, message: `Your ticket has been created with a reference number of: ${ticket_id}` });
+    } else {
+      res.status(404).send('Failed to retrieve ticket ID');
+    }
+  })
+  .catch(error => {
+    console.error(error);
+    res.status(500).send('We failed to create your ticket. Please contact the help desk.');
+  });
+});
+
+// API END POINT TO LOOKUP EQUIPMENT ID BASED ON SERIAL NUMBER
+app.get('/serialnumber/:serial_number', (req, res) => {
+  const { serial_number } = req.params;
+  knex('equipment')
+    .select('equipment_id')
+    .where('serial_number', serial_number)
+    .then(data => {
+      if (data.length > 0) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ message: `Serial number '${serial_number}' not found` });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+})
+
 app.patch("/updatepassword", (req, res) => {
   req.session.username = req.body.username;
   knex("help_desk_users")
     .where(`username = ${req.body.username}`)
     .update("password", req.body.password);
   res.status(201).send("Password updated").cookie();
+});
+
+app.get('/', (req, res) => {
+  res.send("Express is up and running")
+})
+
+// Route to fetch tickets
+app.get("/tickets", (req, res) => {
+  knex("tickets")
+    .select("*")
+    .then((tickets) => {
+      res.status(200).json(tickets);
+    })
+    .catch((error) => {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+app.get("/tickets/:id", (req, res) => {
+  const { id } = req.params;
+
+  knex("tickets")
+    .select("*")
+    .where({ id: id })
+    .then((ticket) => {
+      if (ticket.length === 0) {
+        // If no ticket found with the provided ID
+        res.status(404).json({ error: "Ticket not found" });
+      } else {
+        // If ticket found, return it
+        res.status(200).json(ticket[0]);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching ticket:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
 });
 
 app.listen(port, () => {
