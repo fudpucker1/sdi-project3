@@ -36,7 +36,6 @@ services:
       - /db_data:/db_data
     depends_on:
       - db
-      
 volumes:
   db:
   db_data:

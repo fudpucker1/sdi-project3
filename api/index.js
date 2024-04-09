@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const port = 8080;
@@ -9,47 +9,55 @@ const knex = require("knex")(
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:3000"
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cookieSession({
-    name: "user_session",
+    username: "user_session",
+    // secure: true,
     httpOnly: true,
-    sameSite: "strict",
+    // sameSite: "strict",
     secret: process.env.secret,
+    maxAge: 24 * 60 * 60 * 1000,
+    path: "/login",
+
   })
 );
 
-const user_info = [
-  {
-    username: "chuck",
-    password: "password"
-  }
-]
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  // res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where('username', '=', req.body.username)
+    .where({
+      username: `${req.body.username}`,
+    })
     .then((user_info) => {
-      if (user_info === null) {
+      console.log(req.body.username);
+      if (user_info.length === 0) {
         res.status(404).send("User/Password not found");
-      } else if (user_info.password !== req.password) {
+      } else if (user_info[0].password !== req.body.password) {
+        console.log(user_info);
         res.status(404).send("User/Password not found");
       } else {
         req.session.username = req.body.username;
-        res.status(200).send("Logging in!").cookie();
+        res.status(200).cookie("userid", "1").send("Loggin in");
       }
     });
 });
 
-app.post('/newlogin', (req, res) => {
+app.post("/newlogin", (req, res) => {
   knex("help_desk_users")
     .select("*")
     .where('username', '=', req.body.username)
@@ -123,11 +131,11 @@ app.get('/serialnumber/:serial_number', (req, res) => {
     });
 })
 
-app.patch('/updatepassword', (req, res) => {
+app.patch("/updatepassword", (req, res) => {
   req.session.username = req.body.username;
   knex("help_desk_users")
-    .where(`username = ${req.username}`)
-    .update("password", req.password);
+    .where(`username = ${req.body.username}`)
+    .update("password", req.body.password);
   res.status(201).send("Password updated").cookie();
 });
 
