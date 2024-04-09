@@ -11,14 +11,13 @@ import TicketInfo from "./Pages/TicketInfo";
 import FAQ from "./Pages/FAQ";
 import Login from "./Pages/Login";
 import NewAccount from "./Pages/NewAccount";
-import { LoggedInProvider } from "./Pages/Logged-in-context";
+import { LoggedInProvider } from "./Pages/Logged-In-context";
 import 'bootstrap/dist/css/bootstrap.css';
 
 export default function App() {
   return (
     <div className="App">
       <h1>HelpDeskHero</h1>
-      <LoggedInProvider>
         <nav>
           <ul style={{ listStyleType: "none" }}>
             <li>
@@ -60,7 +59,6 @@ export default function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/login" element={<Login />} />
         </Routes>
-      </LoggedInProvider>
     </div>
   );
 }
