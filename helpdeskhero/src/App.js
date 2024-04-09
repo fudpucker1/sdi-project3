@@ -9,14 +9,15 @@ import TicketSubmission from './Pages/TicketSubmission';
 import PostSubmission from './Pages/PostSubmission';
 import TicketInfo from './Pages/TicketInfo';
 import FAQ from './Pages/FAQ';
+import Login from './Pages/Login';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <h1>HelpDeskHero</h1>
 
       <nav>
-        <ul>
+        <ul style= {{ listStyleType: "none" }} >
             <li><Link to="/home">Home</Link></li>
             <li><Link to="/ticket-status">Ticket Status</Link></li>
             <li><Link to="/staff-home">Staff Home</Link></li>
@@ -24,6 +25,8 @@ function App() {
             <li><Link to="/submit-ticket">Submit Ticket</Link></li>
             <li><Link to="/post-submission">Post Submission</Link></li>
             <li><Link to="/faq">FAQ</Link></li>
+            <li><Link to="/login">LOGIN</Link></li>
+
         </ul>
       </nav>
 
@@ -36,9 +39,8 @@ function App() {
         <Route path="/post-submission" element={<PostSubmission/> } />
         <Route path="/ticket-info/:id" element={<TicketInfo/>} />
         <Route path="/faq" element={<FAQ/>} />
+        <Route path="/login" element={<Login/>} />
       </Routes>
     </div>
   );
 }
-
-export default App;

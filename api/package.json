@@ -1,0 +1,20 @@
+{
+  "name": "sdi-project3",
+  "version": "1.0.0",
+  "description": "https://excalidraw.com/#json=CXQTZX7CMp1Cb_GL8t0Ex,vjMRAeVWu0QhdHpX8Ydi7Q",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "knex": "^3.1.0",
+    "pg": "^8.11.5",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.1.0"
+  }
+}
