@@ -21,7 +21,7 @@ export default function App() {
       <nav>
         <div className = 'navbar'>
           <ul style={{ listStyleType: "none" }} className="list-group list-group-horizontal">
-            <li style={{display: 'flex', marginRight: '10px'}} className="list-group-item"><Link to="/home">Home</Link></li>
+            <li style={{display: 'flex', marginRight: '10px'}} className="list-group-item"><Link to="/">Home</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/submit-ticket">Submit Ticket</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/ticket-status">Ticket Status</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/all-tickets">All Tickets</Link></li>
@@ -34,7 +34,7 @@ export default function App() {
       </nav>
 
       <Routes>
-        <Route path="/home" element={<Home/>} />
+        <Route path="/" element={<Home/>} />
         <Route path="/ticket-status" element={<TicketStatus/>} />
         <Route path="/staff" element={<StaffHome/>} />
         <Route path="/all-tickets" element={<AllTickets/>} />

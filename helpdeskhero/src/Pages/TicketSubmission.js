@@ -91,7 +91,7 @@ function TicketSubmission() {
 
    const GoHome = () => {
      setSubmit(false)
-     navigate('/home')
+     navigate('/')
    }
 
    const NewTicket = () => {
