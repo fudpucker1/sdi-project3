@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 function TicketStatus() {
   const navigate = useNavigate();
+  
   const [ticketId, setTicketId] = useState('');
 
 
