@@ -127,7 +127,6 @@ exports.seed = async function(knex, Promise) {
         equipment_id: 1,
         status: 'Open',
         description: 'Laptop not booting up',
-        tasks: 'Investigate the issue',
         customer_name: 'John Doe',
         customer_email: 'john.doe.22@spaceforce.mil',
         create_date: '2024-04-01',
@@ -140,7 +139,6 @@ exports.seed = async function(knex, Promise) {
         equipment_id: 3,
         status: 'In Progress',
         description: 'Server performance degradation',
-        tasks: 'Optimize server settings',
         customer_name: 'Alice Smith',
         customer_email: 'alice.smith.24@spaceforce.mil',
         create_date: '2024-04-02',
@@ -153,7 +151,6 @@ exports.seed = async function(knex, Promise) {
         equipment_id: 5,
         status: 'Open',
         description: 'PC overheating issue',
-        tasks: 'Check cooling system',
         customer_name: 'Bob Johnson',
         customer_email: 'bob.johnson.3@spaceforce.mil',
         create_date: '2024-04-03',
@@ -166,7 +163,6 @@ exports.seed = async function(knex, Promise) {
         equipment_id: 7,
         status: 'Open',
         description: 'Laptop screen flickering',
-        tasks: 'Inspect display cables',
         customer_name: 'Eva Green',
         customer_email: 'eva.green.6@spaceforce.mil',
         create_date: '2024-04-04',
@@ -179,7 +175,6 @@ exports.seed = async function(knex, Promise) {
         equipment_id: 10,
         status: 'Open',
         description: 'Server connection issues',
-        tasks: 'Check network configuration',
         customer_name: 'Michael Brown',
         customer_email: 'michael.brown.36@spaceforce.mil',
         create_date: '2024-04-05',
@@ -194,25 +189,25 @@ exports.seed = async function(knex, Promise) {
   .then(() => {
     return knex('ticket_updates').insert([
       // Ticket 1 updates
-      { help_desk_users_id: 2, ticket_id: 1, body: 'Investigated the issue.', date_created: '2024-04-01', time_created: '12:30:00' },
-      { help_desk_users_id: 3, ticket_id: 1, body: 'Replaced faulty RAM.', date_created: '2024-04-01', time_created: '12:30:00' },
-      { help_desk_users_id: 2, ticket_id: 1, body: 'Confirmed issue resolved.', date_created: '2024-04-01', time_created: '12:30:00' },
+      { help_desk_users_id: 2, ticket_id: 1, body: 'Investigated the issue.', date_created: '2024-04-01 12:30:00' },
+      { help_desk_users_id: 3, ticket_id: 1, body: 'Replaced faulty RAM.', date_created: '2024-04-01 12:30:00' },
+      { help_desk_users_id: 2, ticket_id: 1, body: 'Confirmed issue resolved.', date_created: '2024-04-01 12:30:00' },
 
       // Ticket 2 updates
-      {help_desk_users_id: 3, ticket_id: 2, body: 'Investigating server performance.', date_created: '2024-04-02', time_created: '12:30:00' },
-      { help_desk_users_id: 3, ticket_id: 2, body: 'Optimized server settings.', date_created: '2024-04-02', time_created: '12:30:00' },
+      {help_desk_users_id: 3, ticket_id: 2, body: 'Investigating server performance.', date_created: '2024-04-02 12:30:00' },
+      { help_desk_users_id: 3, ticket_id: 2, body: 'Optimized server settings.', date_created: '2024-04-02 12:30:00' },
 
       // Ticket 3 updates
-      { help_desk_users_id: 4, ticket_id: 3, body: 'Checking cooling system for PC.', date_created: '2024-04-03', time_created: '12:30:00' },
+      { help_desk_users_id: 4, ticket_id: 3, body: 'Checking cooling system for PC.', date_created: '2024-04-03 12:30:00' },
 
       // Ticket 4 updates
-      { help_desk_users_id: 5, ticket_id: 4, body: 'Inspecting display cables.', date_created: '2024-04-04', time_created: '12:30:00' },
+      { help_desk_users_id: 5, ticket_id: 4, body: 'Inspecting display cables.', date_created: '2024-04-04 12:30:00' },
 
       // Ticket 5 updates
-      { help_desk_users_id: 2, ticket_id: 5, body: 'Checking network configuration for server.', date_created: '2024-04-05', time_created: '12:30:00' },
-      { help_desk_users_id: 5, ticket_id: 5, body: 'Confirmed network issue.', date_created: '2024-04-05', time_created: '12:30:00' },
-      { help_desk_users_id: 2, ticket_id: 5, body: 'Restarted server services.', date_created: '2024-04-05', time_created: '12:30:00' },
-      { help_desk_users_id: 5, ticket_id: 5, body: 'Issue resolved.', date_created: '2024-04-05', time_created: '12:30:00' }
+      { help_desk_users_id: 2, ticket_id: 5, body: 'Checking network configuration for server.', date_created: '2024-04-05 12:30:00' },
+      { help_desk_users_id: 5, ticket_id: 5, body: 'Confirmed network issue.', date_created: '2024-04-05 12:30:00' },
+      { help_desk_users_id: 2, ticket_id: 5, body: 'Restarted server services.', date_created: '2024-04-05 12:30:00' },
+      { help_desk_users_id: 5, ticket_id: 5, body: 'Issue resolved.', date_created: '2024-04-05 12:30:00' }
     ])
   })
 };
