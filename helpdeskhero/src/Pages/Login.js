@@ -4,6 +4,7 @@ export default function Login() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleSubmit = () => {
     const data = {
