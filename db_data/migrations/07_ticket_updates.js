@@ -3,8 +3,7 @@ exports.up = function(knex) {
   return knex.schema.createTable('ticket_updates', table => {
     table.increments('update_id').primary();
     table.string('body');
-    table.date('date_created');
-    table.time('time_created');
+    table.timestamp('date_created').defaultTo(knex.fn.now());
     table.integer('help_desk_users_id').unsigned();
     table.foreign('help_desk_users_id').references('help_desk_users.user_id');
     table.integer('ticket_id').unsigned();
