@@ -43,7 +43,7 @@ export default function App() {
         {/* <Route path="/post-submission" element={<PostSubmission/> } /> */}
         <Route path="/ticket-info/:id" element={<TicketInfo/>} />
         <Route path="/faq" element={<FAQ/>} />
-        {/* <Route path="/login" element={<StaffHome/>} /> */}
+        <Route path="/new-account" element={<NewAccount/>} />
       </Routes>
     </div>
   );

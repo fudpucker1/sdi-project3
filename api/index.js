@@ -160,28 +160,44 @@ app.get("/tickets", (req, res) => {
     });
 });
 
-
-
-// GET one ticket
-app.get("/tickets/:id", (req, res) => {
+app.get('/tickets/:id', (req, res) => {
   const { id } = req.params;
-  console.log("does this get updated")
-
-  knex("tickets")
-    .select("*")
-    .where({ ticket_id: parseInt(id) })
-    .then((ticket) => {
-      if (ticket.length === 0) {
-        res.status(404).json({ error: "Ticket not found" });
+  knex('tickets')
+    .select('*')
+    .where('ticket_id', id)
+    .then(data => {
+      if (data.length > 0) {
+        res.status(200).json(data);
       } else {
-        res.status(200).json(ticket[0]);
+        res.status(404).json({ message: `Ticket number '${id}' not found` });
       }
     })
-    .catch((error) => {
-      console.error("Error fetching ticket:", error);
-      res.status(500).json({ error: "Internal server error" });
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
     });
-});
+})
+
+// app.get("/tickets/:id", (req, res) => {
+//   const { id } = req.params;
+
+//   knex("tickets")
+//     .select("*")
+//     .where('ticket_id', id)
+//     .then((ticket) => {
+//       if (ticket.length === 0) {
+//         // If no ticket found with the provided ID
+//         res.status(404).json({ error: "Ticket not found" });
+//       } else {
+//         // If ticket found, return it
+//         res.status(200).json(ticket[0]);
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching ticket:", error);
+//       res.status(500).json({ error: "Internal server error" });
+//     });
+// });
 
 
 

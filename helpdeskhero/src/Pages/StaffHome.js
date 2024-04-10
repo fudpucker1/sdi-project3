@@ -1,41 +1,40 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
+import { loggedInContext } from './Logged-In-context'
 
 function StaffHome() {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { loggedIn , setLoggedIn } = useContext(loggedInContext)
 
   
   const handleSubmit = () => {
     const data = {
       username: userName,
-      password: userPassword
-    }
+      password: userPassword,
+    };
     setSubmitStatus(true);
+    fetch("http://localhost:8080/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      credentials: "include",
+    }).then(async (res) => {
+      if (res.status === 200) {
+        window.location.href = "http://localhost:3000/staff-home";
+      } else {
+        alert(JSON.stringify(res));
+      }
+    });
     setLoggedIn(true);
-    // fetch('http://localhost:8080/login', {
-    //   method: "POST",
-    //   body: JSON.stringify(data)
-    // })
-    // .then(res => {
-    //   if (res.status === 200) {
-    //     console.log('it worked!')
-    //   } else{
-    //     alert(res)
-    //   }
-    // })
   };
 
-  const LogOut = () =>{
-    setLoggedIn(false)
-  }
-
   const handleNewAccount = () => {
-
-  }
+    navigate('/new-account');
+  };
 
 return (
     (
@@ -72,7 +71,7 @@ return (
     :
       <div style={{ marginTop: '5%', paddingBottom: '40%' }}>
         <h2>Log In</h2>
-<br/>
+      <br/>
 
           <form>
             <label style={{marginBottom: 15}}>
@@ -108,9 +107,6 @@ return (
     )
 
 )}
-
-
-
 
 
 export default StaffHome;
