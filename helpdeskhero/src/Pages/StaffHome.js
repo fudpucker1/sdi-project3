@@ -1,10 +1,9 @@
-import React, {useState, useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
-import { loggedInContext } from './Logged-In-context'
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
+import { loggedInContext } from "./Logged-In-context";
 
 function StaffHome() {
-  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const { loggedIn, setLoggedIn } = useContext(loggedInContext);
@@ -24,9 +23,10 @@ function StaffHome() {
       credentials: "include",
     }).then(async (res) => {
       if (res.status === 200) {
+        let jsonres = await res.json();
         setLoggedIn(true);
-        setUserType(res)
-        console.log(userType)
+        setUserType(jsonres[0].user_type_id);
+        console.log(jsonres[0].user_type_id);
       } else {
         alert("Username/Password not found!");
       }
@@ -34,13 +34,12 @@ function StaffHome() {
   };
 
   const handleNewAccount = () => {
-    navigate('/new-account')
+    navigate("/new-account");
   };
 
   const LogOut = () => {
-    setLoggedIn(false)
-  }
-
+    setLoggedIn(false);
+  };
 
   return loggedIn ? (
     <>
