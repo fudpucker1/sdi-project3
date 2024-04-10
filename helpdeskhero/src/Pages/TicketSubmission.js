@@ -126,7 +126,6 @@ function TicketSubmission() {
     setSerialFound(false);
     setSubmit(false)
     console.log(submit)
-
   }
 
   return (
@@ -206,6 +205,8 @@ function TicketSubmission() {
 
 export default TicketSubmission;
 
+
 //DL7400-001
 
 //HP840G7-002
+

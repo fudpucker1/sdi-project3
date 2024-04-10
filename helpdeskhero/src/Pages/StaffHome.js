@@ -10,6 +10,7 @@ function StaffHome() {
   const [submitStatus, setSubmitStatus] = useState(false);
   const { loggedIn , setLoggedIn } = useContext(loggedInContext)
 
+  
   const handleSubmit = () => {
     const data = {
       username: userName,
