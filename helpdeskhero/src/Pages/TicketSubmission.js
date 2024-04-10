@@ -125,7 +125,7 @@ function TicketSubmission() {
     setDescription('');
     setPriority('');
     setSerialFound(false);
-    setSubmit(false);
+    setSubmit(false)
     console.log(submit)
   }
 
@@ -212,3 +212,9 @@ function TicketSubmission() {
 }
 
 export default TicketSubmission;
+
+
+//DL7400-001
+
+//HP840G7-002
+

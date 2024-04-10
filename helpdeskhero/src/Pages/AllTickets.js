@@ -11,7 +11,6 @@ function AllTickets() {
     fetch('http://localhost:8080/tickets/')
       .then(response => response.json())
       .then(data => {
-        console.log('tickets: ', data);
         setTickets(data);
         setFilteredTickets(data);
       })
@@ -19,8 +18,14 @@ function AllTickets() {
   }, []);
 
   const handleSearchInputChange = (event) => {
-    setSearchQuery(event.target.value);
+    const query = event.target.value;
+    setSearchQuery(query);
+    filterTickets(query);
   };
+
+  useEffect(() => {
+    console.log('Filtered tickets:', filteredTickets);
+  }, [filteredTickets]);
 
   const filterTickets = (query) => {
     const filtered = tickets.filter(ticket =>
@@ -98,9 +103,9 @@ function AllTickets() {
               <td>{ticket.create_date}</td>
               <td>{ticket.status}</td>
               <td>{ticket.customer_name}</td>
-              <td>{ticket.assigned_to}</td>
+              <td>{ticket.username}</td>
               <td>{ticket.customer_email}</td>
-              <td>{ticket.equipment_id}</td>
+              <td>{ticket.model}, {ticket.serial_number}</td>
               <td>{ticket.description}</td>
               <td>{ticket.severity}</td>
             </tr>

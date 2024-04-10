@@ -9,10 +9,9 @@ import TicketSubmission from "./Pages/TicketSubmission";
 import PostSubmission from "./Pages/PostSubmission";
 import TicketInfo from "./Pages/TicketInfo";
 import FAQ from "./Pages/FAQ";
-import Login from "./Pages/Login";
 import NewAccount from "./Pages/NewAccount";
 import 'bootstrap/dist/css/bootstrap.css';
-import { ContextLayout } from './Pages/Logged-In-context'
+
 
 export default function App() {
   return (
@@ -26,7 +25,7 @@ export default function App() {
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/submit-ticket">Submit Ticket</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/ticket-status">Ticket Status</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/all-tickets">All Tickets</Link></li>
-            {/* <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/post-submission">Post Submission</Link></li> */}
+            <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/post-submission">Post Submission</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/faq">FAQs</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/staff">Staff Home</Link></li>
         </ul>
@@ -40,10 +39,10 @@ export default function App() {
         <Route path="/staff" element={<StaffHome/>} />
         <Route path="/all-tickets" element={<AllTickets/>} />
         <Route path="/submit-ticket" element={<TicketSubmission/>} />
-        {/* <Route path="/post-submission" element={<PostSubmission/> } /> */}
+        <Route path="/post-submission" element={<PostSubmission/> } />
         <Route path="/ticket-info/:id" element={<TicketInfo/>} />
         <Route path="/faq" element={<FAQ/>} />
-        {/* <Route path="/login" element={<StaffHome/>} /> */}
+        <Route path="/new-account" element={<NewAccount/>} />
       </Routes>
     </div>
   );
