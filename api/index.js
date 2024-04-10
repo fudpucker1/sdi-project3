@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
@@ -163,10 +164,13 @@ app.get("/", (req, res) => {
   res.send("Express is up and running");
 });
 
-// Route to fetch tickets
+// Trinh search branch
 app.get("/tickets", (req, res) => {
   knex("tickets")
     .select("*")
+    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .join('priority_levels', 'priority_id', 'priority_level_id')
     .then((tickets) => {
       res.status(200).json(tickets);
     })
@@ -174,15 +178,22 @@ app.get("/tickets", (req, res) => {
       console.error("Error fetching tickets:", error);
       res.status(500).json({ error: "Internal server error" });
     });
+
 });
 
-app.get("/tickets/:id", (req, res) => {
+
+//Trinh search branch
+app.get('/tickets/:id', (req, res) => {
   const { id } = req.params;
-  knex("tickets")
-    .select("*")
-    .where("ticket_id", id)
-    .then((data) => {
-      if (data.length > 0) {
+  knex('tickets')
+    .select('*')
+    .where('ticket_id', id)
+    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .join('priority_levels', 'priority_id', 'priority_level_id')
+    .then(data => {
+
+    if (data.length > 0) {
         res.status(200).json(data);
       } else {
         res.status(404).json({ message: `Ticket number '${id}' not found` });
@@ -194,26 +205,6 @@ app.get("/tickets/:id", (req, res) => {
     });
 });
 
-// app.get("/tickets/:id", (req, res) => {
-//   const { id } = req.params;
-
-//   knex("tickets")
-//     .select("*")
-//     .where('ticket_id', id)
-//     .then((ticket) => {
-//       if (ticket.length === 0) {
-//         // If no ticket found with the provided ID
-//         res.status(404).json({ error: "Ticket not found" });
-//       } else {
-//         // If ticket found, return it
-//         res.status(200).json(ticket[0]);
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Error fetching ticket:", error);
-//       res.status(500).json({ error: "Internal server error" });
-//     });
-// });
 
 // PATCH one ticket
 app.patch("/tickets/:id", (req, res) => {
@@ -225,11 +216,8 @@ app.patch("/tickets/:id", (req, res) => {
     .where({ ticket_id: parseInt(id) })
     .update(updateFields)
     .then((updatedRows) => {
-      if (updatedRows === 0) {
-        res.status(404).json({ error: "Ticket not found" });
-      } else {
-        res.status(200).json({ message: "Ticket updated successfully" });
-      }
+      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });}
+      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
     })
     .catch((error) => {
       console.error("Error updating ticket:", error);
@@ -237,41 +225,38 @@ app.patch("/tickets/:id", (req, res) => {
     });
 });
 
-// PUT an entirely new ticket
+
+
+
+// PUT an entirely new ticket, erroneously still performs like a PATCH
+
 app.put("/tickets/:id", (req, res) => {
   const { id } = req.params; // string
   const newTicket = req.body;
 
-  // missing values for keys will be interpreted as undefined in javascript
-  // then knex interprets undefined as NULL in the sql database
-
   // make sure the endpoint id is consistent with the request body id
-  // if (parseInt(id) == parseInt(newTicket.ticket_id)) {
-  const fullTicket = {
-    ticket_id: parseInt(newTicket.ticket_id),
-    assigned_to: parseInt(newTicket.assigned_to ?? ""),
-    equipment_id: parseInt(newTicket.equipment_id ?? ""),
-    status: newTicket.status ?? "",
-    description: newTicket.description ?? "",
-    customer_name: newTicket.customer_name ?? "",
-    customer_email: newTicket.customer_email ?? "",
-    create_date: newTicket.create_date ?? "",
-    date_completed: newTicket.date_completed ?? "",
-    priority_level_id: parseInt(newTicket.priority_level_id ?? ""),
-    ticket_type_id: parseInt(newTicket.ticket_type_id ?? ""),
-  };
-  // };
+  if (parseInt(id) == parseInt(newTicket.ticket_id)) {
+    const fullTicket = {
+      ticket_id: parseInt(newTicket.ticket_id),
+      assigned_to: parseInt(newTicket.assigned_to),
+      equipment_id: parseInt(newTicket.equipment_id),
+      status: newTicket.status,
+      description: newTicket.description,
+      customer_name: newTicket.customer_name,
+      customer_email: newTicket.customer_email,
+      create_date: newTicket.create_date,
+      date_completed: newTicket.date_completed,
+      priority_level_id: parseInt(newTicket.priority_level_id),
+      ticket_type_id: parseInt(newTicket.ticket_type_id)
+    };
+};
 
   knex("tickets")
-    .select("*")
     .where({ ticket_id: parseInt(id) })
     .update(fullTicket)
     .then((updatedRows) => {
-      if (updatedRows === 0) {
-        res.status(404).json({ error: "Ticket not found" });
-      } else {
-        res.status(200).json({ message: "Ticket replaced successfully" });
-      }
+      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });} 
+      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
     })
     .catch((error) => {
       console.error("Error replacing ticket:", error);
@@ -283,26 +268,28 @@ app.put("/tickets/:id", (req, res) => {
 app.delete("/tickets/:id", (req, res) => {
   const { id } = req.params;
 
-  knex
-    .transaction((trx) => {
-      return trx("ticket_updates")
-        .where({ ticket_id: parseInt(id) })
-        .del()
-        .then(() => {
-          return trx("tickets")
-            .where({ ticket_id: parseInt(id) })
-            .del();
-        })
-        .then(trx.commit)
-        .catch(trx.rollback);
-    })
-    .then(() => {
-      res.status(200).json({ message: `Ticket with id ${id} deleted.` });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: `Error deleting ticket: ${error}` });
-    });
+ // execute knex transaction to deal with foreign key references
+  knex.transaction(trx => {
+    return trx("ticket_updates")
+      .where({ ticket_id: parseInt(id) }) 
+      .del() // delete the ticket_id in "ticket_updates" table first because its referenced in that table
+      .then(() => {
+        return trx("tickets")
+          .where({ ticket_id: parseInt(id) })
+          .del(); // then delete it from the "tickets" table
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  })
+  .then(() => {
+    res.status(200).json({ message: `Ticket with id ${id} deleted.` });
+  })
+  .catch((error) => {
+    res.status(500).json({ message: `Error deleting ticket: ${error}` });
+  });
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
