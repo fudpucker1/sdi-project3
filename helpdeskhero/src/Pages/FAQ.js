@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function FAQ() {
   return (
-    <div>
+    <div style={{paddingBottom: '30%', margin: 15}}>
       <h2><strong>
         Frequently Asked Questions
         </strong></h2>
