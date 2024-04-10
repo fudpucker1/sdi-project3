@@ -33,14 +33,14 @@ services:
       - db:/var/lib/postgresql/data
 
   db_data:
-    build: "./db_data"
+    build: ./db_data
     volumes:
       - db_data:/db_data
     depends_on:
       - db
 
 volumes:
-  db:
   db_data:
+  db:
   helpdeskhero:
   api:

@@ -15,6 +15,8 @@ function TicketInfo() {
       .catch(error => console.error('Error:', error));
   }, [id]);
 
+  console.log(ticket)
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Assigned To:', assignedTo);
