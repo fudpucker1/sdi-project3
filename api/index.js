@@ -84,14 +84,19 @@ app.post("/newlogin", (req, res) => {
 app.post('/createticket', (req, res) => {
   const { ticket_type_id, priority_level_id, equipment_id, description, customer_name, customer_email } = req.body;
 
-  knex('tickets').insert({
+  const ticketData = {
     ticket_type_id,
     priority_level_id,
-    equipment_id,
     description,
     customer_name,
     customer_email
-  })
+  };
+
+  if (equipment_id !== 'false') {
+    ticketData.equipment_id = equipment_id;
+  }
+
+  knex('tickets').insert(ticketData)
   .then(() => {
     return knex('tickets')
       .where('customer_email', customer_email)
