@@ -142,10 +142,13 @@ app.get('/', (req, res) => {
   res.send("Express is up and running")
 })
 
-// Route to fetch tickets
+// ticket list
 app.get("/tickets", (req, res) => {
   knex("tickets")
     .select("*")
+    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .join('priority_levels', 'priority_id', 'priority_level_id')
     .then((tickets) => {
       res.status(200).json(tickets);
     })
@@ -153,16 +156,20 @@ app.get("/tickets", (req, res) => {
       console.error("Error fetching tickets:", error);
       res.status(500).json({ error: "Internal server error" });
     });
+
 });
 
 
-//still not working:
+// tickets by id
 app.get("/tickets/:id", (req, res) => {
   const { id } = req.params;
 
   knex("tickets")
     .select("*")
-    .where({ id: id })
+    .where("ticket_id", id)
+    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .join('priority_levels', 'priority_id', 'priority_level_id')
     .then((ticket) => {
       if (ticket.length === 0) {
         res.status(404).json({ error: "Ticket not found" });
