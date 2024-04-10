@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
+import SupportIcon from './images/support.gif';
 
 function TicketSubmission() {
   const navigate = useNavigate();
@@ -131,7 +132,9 @@ function TicketSubmission() {
   return (
     (!submit ?
       <div style={{paddingBottom: '50%'}}>
-      <h1 style={{paddingBottom: '10px'}}>Ticket Submission Page</h1>
+        <h1 style={{ paddingBottom: '10px' }}>Ticket Submission Page</h1>
+        <div className='row'>
+          <div className='col-6' style={{marginTop: 35}}>
       <form onSubmit={handleSubmit}>
         <div className = 'Part1' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
 
@@ -181,7 +184,12 @@ function TicketSubmission() {
         </div>
 
         <button className="btn btn-dark" type="submit">Submit</button>
-      </form>
+            </form>
+          </div>
+          <div className='col-6'>
+            <img src={SupportIcon} alt="supporticon" style={{width: 500, height: 500}}></img>
+          </div>
+          </div>
     </div>
 
       :

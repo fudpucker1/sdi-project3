@@ -52,29 +52,32 @@ function AllTickets() {
   };
 
   return (
-    <div>
+    <div style={{paddingBottom: '60%'}}>
       <h1>Welcome to the All Tickets Page</h1>
+      <br/>
       <div>
         <input
           type="text"
+          style={{paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center'}}
           placeholder="Search tickets..."
           value={searchQuery}
           onChange={handleSearchInputChange}
         />
       </div>
+      <br/>
       <table>
         <thead>
           <tr>
             <th></th>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Customer</th>
-            <th>Assigned to:</th>
-            <th>E-mail</th>
-            <th>Equipment</th>
-            <th>Description</th>
-            <th>Severity</th>
+            <th style={{paddingRight: 20, paddingLeft: 150}}>ID</th>
+            <th style={{paddingRight: 20}}>Date</th>
+            <th style={{paddingRight: 20}}>Status</th>
+            <th style={{paddingRight: 20}}>Customer</th>
+            <th style={{paddingRight: 20}}>Assigned to:</th>
+            <th style={{paddingRight: 20}}>E-mail</th>
+            <th style={{paddingRight: 20}}>Equipment</th>
+            <th style={{paddingRight: 20}}>Description</th>
+            <th style={{paddingRight: 20}}>Severity</th>
           </tr>
         </thead>
         <tbody>
@@ -104,8 +107,10 @@ function AllTickets() {
           ))}
         </tbody>
       </table>
-      <button onClick={handleDeleteSelected}>Delete Selected</button>
-      <button onClick={handleChangeAssignedTo}>Change Assigned To</button>
+      <div style={{marginTop: 30}} >
+      <button className="btn btn-dark" style={{marginRight: 10}} onClick={handleDeleteSelected}>Delete Selected</button>
+        <button className="btn btn-dark" onClick={handleChangeAssignedTo}>Change Assigned To</button>
+        </div>
     </div>
   );
 }
