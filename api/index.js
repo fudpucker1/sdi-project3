@@ -84,14 +84,19 @@ app.post("/newlogin", (req, res) => {
 app.post('/createticket', (req, res) => {
   const { ticket_type_id, priority_level_id, equipment_id, description, customer_name, customer_email } = req.body;
 
-  knex('tickets').insert({
+  const ticketData = {
     ticket_type_id,
     priority_level_id,
-    equipment_id,
     description,
     customer_name,
     customer_email
-  })
+  };
+
+  if (equipment_id !== 'false') {
+    ticketData.equipment_id = equipment_id;
+  }
+
+  knex('tickets').insert(ticketData)
   .then(() => {
     return knex('tickets')
       .where('customer_email', customer_email)
@@ -167,10 +172,8 @@ app.get("/tickets/:id", (req, res) => {
     .where({ ticket_id: parseInt(id) })
     .then((ticket) => {
       if (ticket.length === 0) {
-        // If no ticket found with the provided ID
         res.status(404).json({ error: "Ticket not found" });
       } else {
-        // If ticket found, return it
         res.status(200).json(ticket[0]);
       }
     })
@@ -179,6 +182,7 @@ app.get("/tickets/:id", (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     });
 });
+
 
 
 
