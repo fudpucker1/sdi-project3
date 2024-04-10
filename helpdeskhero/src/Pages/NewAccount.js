@@ -7,12 +7,16 @@ export default function NewAccount() {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+  }
   return (
     <div>
       <h1>Create A New Account</h1>
       <form style={{ display: 'flex', flexDirection: 'column'}}
-            // onSubmit={() => handleSubmit()}
-            >
+      onSubmit={() => handleSubmit()}
+      >
 
         <label>Name:
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} />

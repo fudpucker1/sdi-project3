@@ -38,11 +38,11 @@ app.use((req, res, next) => {
 });
 
 app.post("/login", (req, res) => {
-  knex("help_desk_users")
+  knex('help_desk_users')
     .select("*")
     .where({
-      username: `${req.body.username}`,
-    })
+      username: `${req.body.username}`
+  })
     .then((user_info) => {
       console.log(req.body.username);
       if (user_info.length === 0) {
@@ -52,7 +52,7 @@ app.post("/login", (req, res) => {
         res.status(404).send("User/Password not found");
       } else {
         req.session.username = req.body.username;
-        res.status(200).cookie("userid", "1").send("Loggin in");
+        res.status(200).send("Loggin in");
       }
     });
 });
@@ -72,7 +72,6 @@ app.post("/newlogin", (req, res) => {
         res
           .status(201)
           .send("Account has been created, welcome aboard Helldiver")
-          .cookie();
       } else {
         res
           .status(200)
