@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
-import { loggedInContext } from "./Logged-In-context";
+import React, {useState, useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
+import { loggedInContext } from './Logged-In-context'
 
 function StaffHome() {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const { loggedIn, setLoggedIn } = useContext(loggedInContext);

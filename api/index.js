@@ -82,30 +82,27 @@ app.post("/newlogin", (req, res) => {
 });
 
 // API END POINT TO CREATE USER TICKET
-app.post("/createticket", (req, res) => {
-  const {
+app.post('/createticket', (req, res) => {
+  const { ticket_type_id, priority_level_id, equipment_id, description, customer_name, customer_email } = req.body;
+
+  const ticketData = {
     ticket_type_id,
     priority_level_id,
-    equipment_id,
     description,
     customer_name,
-    customer_email,
-  } = req.body;
+    customer_email
+  };
 
-  knex("tickets")
-    .insert({
-      ticket_type_id,
-      priority_level_id,
-      equipment_id,
-      description,
-      customer_name,
-      customer_email,
-    })
-    .then(() => {
-      return knex("tickets")
-        .where("customer_email", customer_email)
-        .orderBy("create_date", "desc")
-        .first("ticket_id");
+  if (equipment_id !== 'false') {
+    ticketData.equipment_id = equipment_id;
+  }
+
+  knex('tickets').insert(ticketData)
+  .then(() => {
+    return knex('tickets')
+      .where('customer_email', customer_email)
+      .orderBy('create_date', 'desc')
+      .first('ticket_id')
     })
     .then(({ ticket_id }) => {
       if (ticket_id) {
@@ -171,26 +168,136 @@ app.get("/tickets", (req, res) => {
     });
 });
 
-app.get("/tickets/:id", (req, res) => {
+app.get('/tickets/:id', (req, res) => {
   const { id } = req.params;
+  knex('tickets')
+    .select('*')
+    .where('ticket_id', id)
+    .then(data => {
+      if (data.length > 0) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ message: `Ticket number '${id}' not found` });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+})
+
+// app.get("/tickets/:id", (req, res) => {
+//   const { id } = req.params;
+
+//   knex("tickets")
+//     .select("*")
+//     .where('ticket_id', id)
+//     .then((ticket) => {
+//       if (ticket.length === 0) {
+//         // If no ticket found with the provided ID
+//         res.status(404).json({ error: "Ticket not found" });
+//       } else {
+//         // If ticket found, return it
+//         res.status(200).json(ticket[0]);
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching ticket:", error);
+//       res.status(500).json({ error: "Internal server error" });
+//     });
+// });
+
+
+
+
+// PATCH one ticket
+app.patch("/tickets/:id", (req, res) => {
+  const { id } = req.params;
+  const updateFields = req.body;
 
   knex("tickets")
     .select("*")
-    .where({ id: id })
-    .then((ticket) => {
-      if (ticket.length === 0) {
-        // If no ticket found with the provided ID
-        res.status(404).json({ error: "Ticket not found" });
-      } else {
-        // If ticket found, return it
-        res.status(200).json(ticket[0]);
-      }
+    .where({ ticket_id: parseInt(id) })
+    .update(updateFields)
+    .then((updatedRows) => {
+      if (updatedRows === 0) {res.status(404).json({ error: "Ticket not found" });}
+      else {res.status(200).json({ message: "Ticket updated successfully" });}
     })
     .catch((error) => {
-      console.error("Error fetching ticket:", error);
+      console.error("Error updating ticket:", error);
       res.status(500).json({ error: "Internal server error" });
     });
 });
+
+
+
+// PUT an entirely new ticket
+app.put("/tickets/:id", (req, res) => {
+  const { id } = req.params; // string
+  const newTicket = req.body;
+
+  // missing values for keys will be interpreted as undefined in javascript
+  // then knex interprets undefined as NULL in the sql database
+
+  // make sure the endpoint id is consistent with the request body id
+  // if (parseInt(id) == parseInt(newTicket.ticket_id)) {
+    const fullTicket = {
+      ticket_id: parseInt(newTicket.ticket_id),
+      assigned_to: parseInt(newTicket.assigned_to ?? ""),
+      equipment_id: parseInt(newTicket.equipment_id ?? ""),
+      status: newTicket.status ?? "",
+      description: newTicket.description ?? "",
+      customer_name: newTicket.customer_name ?? "",
+      customer_email: newTicket.customer_email ?? "",
+      create_date: newTicket.create_date ?? "",
+      date_completed: newTicket.date_completed ?? "",
+      priority_level_id: parseInt(newTicket.priority_level_id ?? ""),
+      ticket_type_id: parseInt(newTicket.ticket_type_id ?? "")
+    };
+// };
+
+  knex("tickets")
+    .select("*")
+    .where({ ticket_id: parseInt(id) })
+    .update(fullTicket)
+    .then((updatedRows) => {
+      if (updatedRows === 0) {res.status(404).json({ error: "Ticket not found" });}
+      else {res.status(200).json({ message: "Ticket replaced successfully" });}
+    })
+    .catch((error) => {
+      console.error("Error replacing ticket:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+
+
+// DELETE a ticket using the id
+app.delete("/tickets/:id", (req, res) => {
+  const { id } = req.params;
+
+  knex.transaction(trx => {
+    return trx("ticket_updates")
+      .where({ ticket_id: parseInt(id) })
+      .del()
+      .then(() => {
+        return trx("tickets")
+          .where({ ticket_id: parseInt(id) })
+          .del();
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  })
+  .then(() => {
+    res.status(200).json({ message: `Ticket with id ${id} deleted.` });
+  })
+  .catch((error) => {
+    res.status(500).json({ message: `Error deleting ticket: ${error}` });
+  });
+});
+
+
+
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
