@@ -1,37 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { loggedInContext } from './Logged-In-context'
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [submitStatus, setSubmitStatus] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { loggedIn , setLoggedIn } = useContext(loggedInContext)
 
   const handleSubmit = () => {
     const data = {
       username: userName,
-      password: userPassword
-    }
+      password: userPassword,
+    };
     setSubmitStatus(true);
-    fetch('http://localhost:8080/login', {
+    fetch("http://localhost:8080/login", {
       method: "POST",
-      body: JSON.stringify(data)
-    })
-    .then(res => {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      credentials: "include",
+    }).then(async (res) => {
       if (res.status === 200) {
-        console.log('it worked!')
-      } else{
-        alert(res)
+        window.location.href = "http://localhost:3000/staff-home";
+      } else {
+        alert(JSON.stringify(res));
       }
-    })
+    });
+    setLoggedIn(true);
   };
 
   const handleNewAccount = () => {
-
-  }
+    window.location.href = "http://localhost:3000/new-account";
+  };
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header>
         <p>The login page is up and running.</p>
         <form>
           <label>
@@ -52,7 +55,9 @@ export default function Login() {
           </label>
           <input type="button" value="Submit" onClick={() => handleSubmit()} />
         </form>
-        <button type='button' onClick={() => handleNewAccount()}>Create New Account</button>
+        <button type="button" onClick={() => handleNewAccount()}>
+          Create New Account
+        </button>
       </header>
     </div>
   );
