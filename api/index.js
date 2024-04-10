@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
@@ -195,10 +196,6 @@ app.get('/tickets/:id', (req, res) => {
 })
 
 
-
-
-
-
 // PATCH one ticket
 app.patch("/tickets/:id", (req, res) => {
   const { id } = req.params;
@@ -283,8 +280,6 @@ app.delete("/tickets/:id", (req, res) => {
     res.status(500).json({ message: `Error deleting ticket: ${error}` });
   });
 });
-
-
 
 
 app.listen(port, () => {
