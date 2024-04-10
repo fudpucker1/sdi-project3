@@ -13,6 +13,7 @@ function TicketSubmission() {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('');
   const [serialFound, setSerialFound] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   // return eqiupment_id based on serial number
   const serialLookup = async (event) => {
@@ -73,6 +74,7 @@ function TicketSubmission() {
       }
 
       const data = await response.json();
+      setSubmit(true)
       console.log(equipmentID);
       navigate('/post-submission', { state: { TicketId: data.ticket_id } });
     } catch (error) {
@@ -81,21 +83,42 @@ function TicketSubmission() {
     }
   };
 
+   // this contains the routing URL location
+   const location = useLocation();
+   // this contains the state passed from <TicketSubmission/> for the TicketId
+   // const TicketId = location.state.TicketId;
+   const TicketId = 100;
+
+   const GoHome = () => {
+     setSubmit(false)
+     navigate('/')
+   }
+
+   const NewTicket = () => {
+     setSubmit(false)
+     console.log(submit)
+   }
+
   return (
-    <div>
-      <h1>Welcome to the Ticket Submission Page</h1>
+    (!submit ?
+      <div style={{paddingBottom: '50%'}}>
+      <h1 style={{paddingBottom: '10px'}}>Ticket Submission Page</h1>
       <form onSubmit={handleSubmit}>
-        <label>Name:
-          <input type="text" value={username} onChange={(e) => setUserName(e.target.value)} />
-        </label>
+        <div className = 'Part1' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
 
-        <label>Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <label style={{ marginBottom: 25}}>
+          <input type="text" placeholder="Enter Name" style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }} value={username} onChange={(e) => setUserName(e.target.value)} />
         </label>
+        <br/>
 
-        <label>Ticket Type:
-          <select value={ticketType} onChange={(e) => setTicketType(e.target.value)}>
-            <option value="">Select...</option>
+        <label style={{ marginBottom: 25}}>
+          <input type="email" placeholder="Enter Offical Email" style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }} value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <br/>
+
+        <label style={{ marginBottom: 25}}>
+          <select value={ticketType} style={{ display: 'flex', flexDirection: 'column', paddingLeft: 70, borderRadius: 5, textAlign: 'center' }} onChange={(e) => setTicketType(e.target.value)}>
+            <option value="">Ticket Type</option>
             <option value="1">Technical Issue</option>
             <option value="2">User Support</option>
             <option value="3">Software Enhancement</option>
@@ -103,20 +126,22 @@ function TicketSubmission() {
             <option value="5">Network Connectivity</option>
           </select>
         </label>
-
-        <label>Serial Number:
-          <input type="text" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
+          <br/>
+        <label style={{ marginBottom: 25}}>
+            <input style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }} type="text" placeholder="Serial Number" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
           {serialFound && <span style={{ color: 'green' }}>✓</span>} {/* Display green checkmark if serial found */}
         </label>
-        <button onClick={serialLookup}>Search</button>
-
-        <label>Problem Description:
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+        </div>
+        <button className="btn btn-dark" onClick={serialLookup}>Search</button>
+        <br/>
+        <div className = 'Part2' style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <label style={{ marginBottom: 25, marginTop: 25}}>
+            <textarea placeholder="Problem Description" style={{ borderRadius: 5, textAlign: 'center', paddingLeft: 60, paddingRight: 60 }} value={description} onChange={(e) => setDescription(e.target.value)} />
         </label>
 
-        <label>Priority:
-          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-            <option value="">Select...</option>
+        <label style={{ marginBottom: 25, marginRight: 5}}>
+            <select style={{ display: 'flex', flexDirection: 'column', paddingLeft: 70, paddingRight: 70, borderRadius: 5, textAlign: 'center' }} value={priority} onChange={(e) => setPriority(e.target.value)}>
+            <option value="">Priority Level</option>
             <option value="1">Low</option>
             <option value="2">Medium</option>
             <option value="3">High</option>
@@ -124,10 +149,28 @@ function TicketSubmission() {
             <option value="5">Emergency</option>
           </select>
         </label>
+        </div>
 
-        <button type="submit">Submit</button>
+        <button className="btn btn-dark" type="submit" onSubmit={() => handleSubmit()}>Submit</button>
       </form>
     </div>
+
+      :
+    <div style={{paddingBottom: '50%'}}>
+      <h1>Welcome to the Post Submission Page</h1>
+      <br></br>
+      <h4>Your Ticket Id is {TicketId}. Use your Ticket Id to make any updates to your ticket.</h4>
+      <h4>You will receive an automated email from helpdeskhero@spacemail.gov.</h4>
+      <h4>You may now close this window.</h4>
+      <br></br>
+      <br></br>
+
+      <div className = 'Buttons' style={{display: 'flex', justifyContent: 'center', columnGap: '50px'}}>
+      <button type="button" className="btn btn-dark btn-lg" onClick = {() => GoHome()}>Go Home</button>
+      <button type="button" className="btn btn-dark btn-lg" onClick = {() => NewTicket()}>Submit New Ticket</button>
+      </div>
+    </div>
+    )
   );
 }
 
