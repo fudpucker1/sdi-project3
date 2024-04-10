@@ -98,6 +98,8 @@ app.get("/tickets", (req, res) => {
     });
 });
 
+
+//still not working:
 app.get("/tickets/:id", (req, res) => {
   const { id } = req.params;
 
@@ -106,10 +108,8 @@ app.get("/tickets/:id", (req, res) => {
     .where({ id: id })
     .then((ticket) => {
       if (ticket.length === 0) {
-        // If no ticket found with the provided ID
         res.status(404).json({ error: "Ticket not found" });
       } else {
-        // If ticket found, return it
         res.status(200).json(ticket[0]);
       }
     })
@@ -118,6 +118,8 @@ app.get("/tickets/:id", (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     });
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
