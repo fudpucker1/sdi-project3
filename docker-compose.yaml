@@ -1,14 +1,25 @@
 version: "3"
 
 services:
+  helpdeskhero:
+    build: ./helpdeskhero
+    ports:
+      - "3000:3000"
+    volumes:
+      - helpdeskhero:/helpdeskhero
+    depends_on:
+      - db
+
   api:
-    build: api/
+    build: ./api
     ports:
       - "8080:8080"
     environment:
       DB_CONNECTION_STRING: "postgres://postgres:docker@db:5432/helpdesk_tracker"
     depends_on:
     - db
+    volumes:
+    - api:/api
 
   db:
     image: postgres:latest
@@ -20,12 +31,16 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
+
   db_data:
     build: "./db_data"
     volumes:
       - db_data:/db_data
     depends_on:
       - db
+
 volumes:
   db:
   db_data:
+  helpdeskhero:
+  api:
