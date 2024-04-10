@@ -9,10 +9,12 @@ const knex = require("knex")(
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 
-app.use(cors({
-  credentials: true,
-  origin: "http://localhost:3000"
-}));
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -25,7 +27,6 @@ app.use(
     secret: process.env.secret,
     maxAge: 24 * 60 * 60 * 1000,
     path: "/login",
-
   })
 );
 
@@ -38,11 +39,11 @@ app.use((req, res, next) => {
 });
 
 app.post("/login", (req, res) => {
-  knex('help_desk_users')
+  knex("help_desk_users")
     .select("*")
     .where({
-      username: `${req.body.username}`
-  })
+      username: `${req.body.username}`,
+    })
     .then((user_info) => {
       console.log(req.body.username);
       if (user_info.length === 0) {
@@ -52,7 +53,7 @@ app.post("/login", (req, res) => {
         res.status(404).send("User/Password not found");
       } else {
         req.session.username = req.body.username;
-        res.status(200).send("Loggin in");
+        res.status(200).json(user_info.user_type_id);
       }
     });
 });
@@ -60,7 +61,7 @@ app.post("/login", (req, res) => {
 app.post("/newlogin", (req, res) => {
   knex("help_desk_users")
     .select("*")
-    .where('username', '=', req.body.username)
+    .where("username", "=", req.body.username)
     .then((user) => {
       if (user === null) {
         knex("help_desk_users").insert({
@@ -71,7 +72,7 @@ app.post("/newlogin", (req, res) => {
         req.session.username = req.body.username;
         res
           .status(201)
-          .send("Account has been created, welcome aboard Helldiver")
+          .send("Account has been created, welcome aboard Helldiver");
       } else {
         res
           .status(200)
@@ -81,54 +82,69 @@ app.post("/newlogin", (req, res) => {
 });
 
 // API END POINT TO CREATE USER TICKET
-app.post('/createticket', (req, res) => {
-  const { ticket_type_id, priority_level_id, equipment_id, description, customer_name, customer_email } = req.body;
-
-  knex('tickets').insert({
+app.post("/createticket", (req, res) => {
+  const {
     ticket_type_id,
     priority_level_id,
     equipment_id,
     description,
     customer_name,
-    customer_email
-  })
-  .then(() => {
-    return knex('tickets')
-      .where('customer_email', customer_email)
-      .orderBy('create_date', 'desc')
-      .first('ticket_id')
+    customer_email,
+  } = req.body;
+
+  knex("tickets")
+    .insert({
+      ticket_type_id,
+      priority_level_id,
+      equipment_id,
+      description,
+      customer_name,
+      customer_email,
     })
-  .then(({ ticket_id }) => {
-    if (ticket_id) {
-      res.status(201).json({ ticket_id, message: `Your ticket has been created with a reference number of: ${ticket_id}` });
-    } else {
-      res.status(404).send('Failed to retrieve ticket ID');
-    }
-  })
-  .catch(error => {
-    console.error(error);
-    res.status(500).send('We failed to create your ticket. Please contact the help desk.');
-  });
+    .then(() => {
+      return knex("tickets")
+        .where("customer_email", customer_email)
+        .orderBy("create_date", "desc")
+        .first("ticket_id");
+    })
+    .then(({ ticket_id }) => {
+      if (ticket_id) {
+        res.status(201).json({
+          ticket_id,
+          message: `Your ticket has been created with a reference number of: ${ticket_id}`,
+        });
+      } else {
+        res.status(404).send("Failed to retrieve ticket ID");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res
+        .status(500)
+        .send("We failed to create your ticket. Please contact the help desk.");
+    });
 });
 
 // API END POINT TO LOOKUP EQUIPMENT ID BASED ON SERIAL NUMBER
-app.get('/serialnumber/:serial_number', (req, res) => {
+app.get("/serialnumber/:serial_number", (req, res) => {
   const { serial_number } = req.params;
-  knex('equipment')
-    .select('equipment_id')
-    .where('serial_number', serial_number)
-    .then(data => {
+  knex("equipment")
+    .select("equipment_id")
+    .where("serial_number", serial_number)
+    .then((data) => {
       if (data.length > 0) {
         res.status(200).json(data);
       } else {
-        res.status(404).json({ message: `Serial number '${serial_number}' not found` });
+        res
+          .status(404)
+          .json({ message: `Serial number '${serial_number}' not found` });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     });
-})
+});
 
 app.patch("/updatepassword", (req, res) => {
   req.session.username = req.body.username;
@@ -138,9 +154,9 @@ app.patch("/updatepassword", (req, res) => {
   res.status(201).send("Password updated").cookie();
 });
 
-app.get('/', (req, res) => {
-  res.send("Express is up and running")
-})
+app.get("/", (req, res) => {
+  res.send("Express is up and running");
+});
 
 // Route to fetch tickets
 app.get("/tickets", (req, res) => {
@@ -178,4 +194,17 @@ app.get("/tickets/:id", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
+});
+
+app.post("/account_request", async (req, res) => {
+  knex("account_request")
+    .insert({
+      id: await knex("account_request").select("*").length,
+      name: req.body.name,
+      email: req.body.email,
+      accountType: req.body.accountType,
+      userName: req.body.username,
+      password: req.body.password,
+    })
+    .then(res.status(202).send("Account Requested"));
 });

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function NewAccount() {
   const [name, setName] = useState('');
@@ -6,16 +7,44 @@ export default function NewAccount() {
   const [accountType, setAccountType] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [submit, setSubmit] = useState(false);
+  const navigate = useNavigate();
+
+
+  const request_data = {
+    name: name,
+    email: email,
+    accountType: accountType,
+    username: userName,
+    password: password,
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    fetch('http://localhost:8080/account_request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request_data),
+    })
+    .then(setSubmit(true),
+      window.confirm('Account request submitted!'),
+      // window.location.href = "http://localhost:3000/";
+      navigate('/')
+    )
 
-  }
+    .catch(error => {
+      console.error('Error submitting request:', error);
+      alert('Error submitting request. Please try again.');
+    })
+  };
+
   return (
     <div>
       <h1>Create A New Account</h1>
       <form style={{ display: 'flex', flexDirection: 'column'}}
-      onSubmit={() => handleSubmit()}
+      onSubmit={(event) => handleSubmit(event)}
       >
 
         <label>Name:
@@ -34,9 +63,6 @@ export default function NewAccount() {
             <option value="supervisor">Supervisor</option>
             <option value="project manager">Project Manager</option>
             <option value="auditor">Auditor</option>
-            <option value="staff">Staff</option>
-            <option value="intern">Intern</option>
-            <option value="kendrick">Kendrick</option>
           </select>
         </label>
 
