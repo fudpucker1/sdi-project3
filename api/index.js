@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
@@ -177,27 +178,6 @@ app.get('/tickets/:id', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 })
-
-// app.get("/tickets/:id", (req, res) => {
-//   const { id } = req.params;
-
-//   knex("tickets")
-//     .select("*")
-//     .where('ticket_id', id)
-//     .then((ticket) => {
-//       if (ticket.length === 0) {
-//         // If no ticket found with the provided ID
-//         res.status(404).json({ error: "Ticket not found" });
-//       } else {
-//         // If ticket found, return it
-//         res.status(200).json(ticket[0]);
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Error fetching ticket:", error);
-//       res.status(500).json({ error: "Internal server error" });
-//     });
-// });
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
