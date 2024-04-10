@@ -5,8 +5,9 @@ function TicketInfo() {
   const { id } = useParams();
 
   const [ticket, setTicket] = useState(null);
-  const [assignedTo, setAssignedTo] = useState('');
+  const [assignedTo, setAssignedTo] = useState();
   const [updates, setUpdates] = useState('');
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/tickets/${id}`)
@@ -19,8 +20,17 @@ function TicketInfo() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Assigned To:', assignedTo);
-    console.log('Updates:', updates);
+    console.log('Assigned To:', assignedTo); // todo: POST to tickets if new assignment
+    console.log('Updates:', updates); // todo: POST to ticket_updates
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete?')) {
+      fetch(`http://localhost:8080/tickets/${id}`, {method: 'DELETE'})
+        .then(response => response.json())
+        .then(() => setIsDeleted(true))
+        .catch(error => {console.error('Error deleting ticket:', error);});
+    }
   };
 
   if (!ticket) {
@@ -37,19 +47,28 @@ function TicketInfo() {
       <p>Equipment Type: {ticket.equipment_name}</p> {/* Display equipment name */}
       <p>Description: {ticket.description}</p>
       <p>Priority: {ticket.severity}</p>
-
+      <p>Currently assigned to: {ticket.assigned_to}</p>
+      
+      {
+      isDeleted ? <p>Ticket deleted.</p> : <button onClick={() => handleDelete()}>Delete Ticket</button>
+      }
+      
       <h2>Assign Ticket</h2>
+
       <form onSubmit={handleSubmit}>
-        <label>
-          Assigned To:
+
+        <label>Assigned To:
           <input type="text" value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)} />
         </label>
-        <label>
-          Updates:
+
+        <label>Updates:
           <textarea value={updates} onChange={(e) => setUpdates(e.target.value)} />
         </label>
+
         <button type="submit">Submit</button>
+
       </form>
+
     </div>
   );
 }

@@ -6,7 +6,7 @@ exports.up = function(knex) {
     table.foreign('assigned_to').references('help_desk_users.user_id');
     table.integer('equipment_id').unsigned();
     table.foreign('equipment_id').references('equipment.equipment_id');
-    table.string('status').defaultTo("Open");;
+    table.string('status').defaultTo("Open");
     table.string('description');
     table.string('customer_name');
     table.string('customer_email');
