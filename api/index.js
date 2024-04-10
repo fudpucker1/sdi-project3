@@ -220,8 +220,8 @@ app.patch("/tickets/:id", (req, res) => {
     .where({ ticket_id: parseInt(id) })
     .update(updateFields)
     .then((updatedRows) => {
-      if (updatedRows === 0) {res.status(404).json({ error: "Ticket not found" });}
-      else {res.status(200).json({ message: "Ticket updated successfully" });}
+      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });}
+      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
     })
     .catch((error) => {
       console.error("Error updating ticket:", error);
@@ -231,38 +231,36 @@ app.patch("/tickets/:id", (req, res) => {
 
 
 
-// PUT an entirely new ticket
+// PUT an entirely new ticket, erroneously still performs like a PATCH
 app.put("/tickets/:id", (req, res) => {
   const { id } = req.params; // string
   const newTicket = req.body;
 
-  // missing values for keys will be interpreted as undefined in javascript
-  // then knex interprets undefined as NULL in the sql database
-
   // make sure the endpoint id is consistent with the request body id
-  // if (parseInt(id) == parseInt(newTicket.ticket_id)) {
+  if (parseInt(id) == parseInt(newTicket.ticket_id)) {
     const fullTicket = {
       ticket_id: parseInt(newTicket.ticket_id),
-      assigned_to: parseInt(newTicket.assigned_to ?? ""),
-      equipment_id: parseInt(newTicket.equipment_id ?? ""),
-      status: newTicket.status ?? "",
-      description: newTicket.description ?? "",
-      customer_name: newTicket.customer_name ?? "",
-      customer_email: newTicket.customer_email ?? "",
-      create_date: newTicket.create_date ?? "",
-      date_completed: newTicket.date_completed ?? "",
-      priority_level_id: parseInt(newTicket.priority_level_id ?? ""),
-      ticket_type_id: parseInt(newTicket.ticket_type_id ?? "")
+      assigned_to: parseInt(newTicket.assigned_to),
+      equipment_id: parseInt(newTicket.equipment_id),
+      status: newTicket.status,
+      description: newTicket.description,
+      customer_name: newTicket.customer_name,
+      customer_email: newTicket.customer_email,
+      create_date: newTicket.create_date,
+      date_completed: newTicket.date_completed,
+      priority_level_id: parseInt(newTicket.priority_level_id),
+      ticket_type_id: parseInt(newTicket.ticket_type_id)
     };
-// };
+};
 
   knex("tickets")
-    .select("*")
     .where({ ticket_id: parseInt(id) })
     .update(fullTicket)
     .then((updatedRows) => {
-      if (updatedRows === 0) {res.status(404).json({ error: "Ticket not found" });}
-      else {res.status(200).json({ message: "Ticket replaced successfully" });}
+
+      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });} 
+      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
+
     })
     .catch((error) => {
       console.error("Error replacing ticket:", error);
@@ -276,14 +274,15 @@ app.put("/tickets/:id", (req, res) => {
 app.delete("/tickets/:id", (req, res) => {
   const { id } = req.params;
 
+  // execute knex transaction to deal with foreign key references
   knex.transaction(trx => {
     return trx("ticket_updates")
-      .where({ ticket_id: parseInt(id) })
-      .del()
+      .where({ ticket_id: parseInt(id) }) 
+      .del() // delete the ticket_id in "ticket_updates" table first because its referenced in that table
       .then(() => {
         return trx("tickets")
           .where({ ticket_id: parseInt(id) })
-          .del();
+          .del(); // then delete it from the "tickets" table
       })
       .then(trx.commit)
       .catch(trx.rollback);
