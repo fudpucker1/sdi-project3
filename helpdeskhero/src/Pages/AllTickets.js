@@ -46,15 +46,6 @@ function AllTickets() {
     }
   };
 
-  const handleDeleteSelected = () => {
-    // Implement delete logic here using selectedTickets array
-    console.log('Deleting selected tickets:', selectedTickets);
-  };
-
-  const handleChangeAssignedTo = () => {
-    // Implement change assigned_to logic here using selectedTickets array
-    console.log('Changing assigned_to for selected tickets:', selectedTickets);
-  };
 
   return (
     <div>
@@ -109,8 +100,7 @@ function AllTickets() {
           ))}
         </tbody>
       </table>
-      <button onClick={handleDeleteSelected}>Delete Selected</button>
-      <button onClick={handleChangeAssignedTo}>Change Assigned To</button>
+
     </div>
   );
 }

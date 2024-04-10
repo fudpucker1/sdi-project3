@@ -183,7 +183,30 @@ app.get("/tickets/:id", (req, res) => {
     });
 });
 
+app.get("/updates", (req, res) => {
+  knex("ticket_updates")
+    .select("*")
+    .join('help_desk_users', 'help_desk_users.user_id', 'ticket_updates.help_desk_users_id')
+    .then((update) => {
+      if (update.length === 0) {
+        res.status(404).json({ error: "Update not found" });
+      } else {
+        res.status(200).json(update);
+      }
+    })
+})
 
+app.get("/help_desk_users", (req, res) => {
+  knex("help_desk_users")
+    .select("*")
+    .then((user) => {
+      if (user.length === 0) {
+        res.status(404).json({ error: "Users not found" });
+      } else {
+        res.status(200).json(user);
+      }
+    })
+})
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
