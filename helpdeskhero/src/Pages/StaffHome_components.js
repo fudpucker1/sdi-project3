@@ -137,7 +137,7 @@ export const Loginbutton = () => {
 
   const handleOnClick = () => {
    setLoggedIn(false)
-   navigate('/home')
+   navigate('/')
   }
 
   return loggedIn ? (
