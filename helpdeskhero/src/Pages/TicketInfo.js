@@ -15,12 +15,19 @@ function TicketInfo() {
       .catch(error => console.error('Error:', error));
   }, [id]);
 
-  console.log(ticket)
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Assigned To:', assignedTo);
-    console.log('Updates:', updates);
+    console.log('Assigned To:', assignedTo); // todo: POST to tickets if new assignment
+    console.log('Updates:', updates); // todo: POST to ticket_updates
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete?')) {
+      fetch(`http://localhost:8080/tickets/${id}`, {method: 'DELETE'})
+        .then(response => response.json())
+        .then(() => setIsDeleted(true))
+        .catch(error => {console.error('Error deleting ticket:', error);});
+    }
   };
 
   if (!ticket) {
@@ -37,8 +44,14 @@ function TicketInfo() {
       <p>Equipment Type: {ticket.type}</p>
       <p>Status: {ticket.status}</p>
       <p>Priority: {ticket.severity}</p>
+      <p>Currently assigned to: {ticket.assigned_to}</p>
+
+      {
+      isDeleted ? <p>Ticket deleted.</p> : <button onClick={() => handleDelete()}>Delete Ticket</button>
+      }
 
       <h2>Assign Ticket</h2>
+
       <form onSubmit={handleSubmit}>
         <label>
           Assigned To:
@@ -48,8 +61,11 @@ function TicketInfo() {
           Updates:
           <textarea value={updates} onChange={(e) => setUpdates(e.target.value)} />
         </label>
+
         <button type="submit">Submit</button>
+
       </form>
+
     </div>
   );
 }
