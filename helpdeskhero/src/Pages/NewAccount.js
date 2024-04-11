@@ -36,37 +36,43 @@ export default function NewAccount() {
   };
 
   return (
-    <div>
-      <h1>Create A New Account</h1>
+    <div style={{paddingBottom: '50%'}}>
+      <h1 style={{ paddingBottom: '30px' }}>Create A New Account</h1>
+
       <form
-        style={{ display: "flex", flexDirection: "column" }}
+        
         onSubmit={(event) => handleSubmit(event)}
       >
-        <label>
-          Name:
+        <label style={{ marginBottom: 25}}>
+          
           <input
             type="text"
+            placeholder="Enter Name"
+            style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </label>
-
-        <label>
-          Email:
+        <br/>
+        <label style={{ marginBottom: 25}}>
+          
           <input
             type="email"
             value={email}
+            placeholder="Enter Email"
+            style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }}
             onChange={(e) => setEmail(e.target.value)}
           />
         </label>
-
-        <label>
-          Account-Type:
+      <br/>
+        <label style={{ marginBottom: 25}}>
+          
           <select
             value={accountType}
+            style={{paddingLeft: 50, paddingRight: 50,borderRadius: 5, textAlign:'center'}}
             onChange={(e) => setAccountType(e.target.value)}
           >
-            <option value="">Select...</option>
+            <option value="">Select Account Type...</option>
             <option value="admin">Admin</option>
             <option value="agent">Agent</option>
             <option value="supervisor">Supervisor</option>
@@ -74,26 +80,30 @@ export default function NewAccount() {
             <option value="auditor">Auditor</option>
           </select>
         </label>
-
-        <label>
-          Username:
+        <br/>
+        <label style={{ marginBottom: 25}}>
+          
           <input
             type="text"
+            placeholder="Enter Username"
+            style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }}
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
           />
         </label>
-
-        <label>
-          Password:
+        <br/>
+        <label style={{ marginBottom: 25}}>
+          
           <input
             type="password"
+            placeholder="Enter Password"
             value={password}
+            style={{ paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center' }}
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-
-        <button type="submit">Submit</button>
+        <br/>
+        <button className="btn btn-dark" type="submit">Submit</button>
       </form>
     </div>
   );
