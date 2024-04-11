@@ -33,7 +33,7 @@ function StaffHome() {
   };
 
   const handleNewAccount = () => {
-    navigate("/new-account");
+    // navigate("/new-account"); commented out for now to commit other changes, getting an error
   };
 
   const LogOut = () => {
