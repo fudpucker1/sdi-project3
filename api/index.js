@@ -181,7 +181,6 @@ app.get("/tickets", (req, res) => {
 
 });
 
-
 //Trinh search branch
 app.get('/tickets/:id', (req, res) => {
   const { id } = req.params;
@@ -204,6 +203,7 @@ app.get('/tickets/:id', (req, res) => {
     });
 });
 
+
 app.get("/updates", (req, res) => {
   knex("ticket_updates")
   .select("*")
@@ -225,6 +225,51 @@ app.get("/help_desk_users", (req, res) => {
         res.status(200).json(user);
       }
 })})
+
+//status page, get tickets
+app.get('/statustickets/:id', (req, res) => {
+  const { id } = req.params;
+  knex('tickets')
+    .select('*')
+    .where('ticket_id', id)
+    .leftJoin('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .leftJoin('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .leftJoin('priority_levels', 'priority_id', 'priority_level_id')
+    .then(data => {
+
+    if (data.length > 0) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ message: `Ticket number '${id}' not found` });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+//status page, get ticket updates
+app.get('/ticketupdates/:id', (req, res) => {
+  const { id } = req.params;
+  knex('ticket_updates')
+    .select('*')
+    .where('ticket_id', id)
+    .orderBy('date_created')
+    .then(data => {
+
+    if (data.length > 0) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ message: `Ticket number '${id}' not found` });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
 
 // PATCH updates to the ticket_updates & tickets tables
 app.patch("/tickets", (req, res) => {
@@ -258,8 +303,9 @@ app.patch("/ticket_updates", (req, res) => {
   });
 
 
-// PUT an entirely new ticket, erroneously still performs like a PATCH
 
+
+// PUT an entirely new ticket, erroneously still performs like a PATCH
 app.put("/tickets/:id", (req, res) => {
   const { id } = req.params; // string
   const newTicket = req.body;

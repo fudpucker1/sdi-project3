@@ -26,7 +26,7 @@ function Home() {
       <div className='row' style={{paddingBottom: '40%' }}>
         <div className='col-12'>
           <button className="btn-lg btn btn-dark mt-5" style={{marginRight: '10%', marginLeft: '10%', padding: 20}} onClick={() => navigate('/submit-ticket')}>Submit a Ticket</button>
-        <button className="btn-lg btn btn-dark mt-5" style={{ marginRight: '10%', padding: 20}} onClick={() => navigate('/ticket-status')}>Ticket Status</button>
+        <button className="btn-lg btn btn-dark mt-5" style={{padding: 20}} onClick={() => navigate('/ticket-status')}>Ticket Status</button>
 
         </div>
       </div>
