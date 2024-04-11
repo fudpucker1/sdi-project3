@@ -2,7 +2,7 @@ exports.up = function(knex) {
   // Create the tickets table
   return knex.schema.createTable('tickets', table => {
     table.increments('ticket_id').primary();
-    table.integer('assigned_to').unsigned();
+    table.integer('assigned_to').unsigned()
     table.foreign('assigned_to').references('help_desk_users.user_id');
     table.integer('equipment_id').unsigned();
     table.foreign('equipment_id').references('equipment.equipment_id');

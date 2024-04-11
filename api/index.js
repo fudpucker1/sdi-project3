@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
@@ -46,11 +45,9 @@ app.post("/login", (req, res) => {
       username: `${req.body.username}`,
     })
     .then((user_info) => {
-      console.log(req.body.username);
       if (user_info.length === 0) {
         res.status(404).send("User/Password not found");
       } else if (user_info[0].password !== req.body.password) {
-        console.log(user_info);
         res.status(404).send("User/Password not found");
       } else {
         req.session.username = req.body.username;
@@ -58,29 +55,6 @@ app.post("/login", (req, res) => {
       }
     });
 });
-
-// app.post("/newlogin", (req, res) => {
-//   knex("help_desk_users")
-//     .select("*")
-//     .where("username", "=", req.body.username)
-//     .then((user) => {
-//       if (user === null) {
-//         knex("help_desk_users").insert({
-//           id: knex("help_desk_users").length + 1,
-//           username: req.body.username,
-//           password: req.body.password,
-//         });
-//         req.session.username = req.body.username;
-//         res
-//           .status(201)
-//           .send("Account has been created, welcome aboard Helldiver");
-//       } else {
-//         res
-//           .status(200)
-//           .send("Username is already in use, please try a different username");
-//       }
-//     });
-// });
 
 // API END POINT TO CREATE USER TICKET
 app.post("/createticket", (req, res) => {
@@ -168,9 +142,9 @@ app.get("/", (req, res) => {
 app.get("/tickets", (req, res) => {
   knex("tickets")
     .select("*")
-    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
-    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
-    .join('priority_levels', 'priority_id', 'priority_level_id')
+    .join("help_desk_users", "help_desk_users.user_id", "tickets.assigned_to")
+    .join("equipment", "equipment.equipment_id", "tickets.equipment_id")
+    .join("priority_levels", "priority_id", "priority_level_id")
     .then((tickets) => {
       res.status(200).json(tickets);
     })
@@ -178,22 +152,38 @@ app.get("/tickets", (req, res) => {
       console.error("Error fetching tickets:", error);
       res.status(500).json({ error: "Internal server error" });
     });
-
 });
 
+app.get("/stafftickets", (req, res) => {
+  knex("tickets")
+    .select("*")
+    .join("ticket_type", "tickets.ticket_type_id", "ticket_type.ticket_type_id")
+    .join("equipment", "tickets.equipment_id", "equipment.equipment_id")
+    .join(
+      "priority_levels",
+      "tickets.priority_level_id",
+      "priority_levels.priority_id"
+    )
+    .then((tickets) => {
+      res.status(200).json(tickets);
+    })
+    .catch((error) => {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
 
 //Trinh search branch
-app.get('/tickets/:id', (req, res) => {
+app.get("/tickets/:id", (req, res) => {
   const { id } = req.params;
-  knex('tickets')
-    .select('*')
-    .where('ticket_id', id)
-    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
-    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
-    .join('priority_levels', 'priority_id', 'priority_level_id')
-    .then(data => {
-
-    if (data.length > 0) {
+  knex("tickets")
+    .select("*")
+    .where("ticket_id", id)
+    .join("help_desk_users", "help_desk_users.user_id", "tickets.assigned_to")
+    .join("equipment", "equipment.equipment_id", "tickets.equipment_id")
+    .join("priority_levels", "priority_id", "priority_level_id")
+    .then((data) => {
+      if (data.length > 0) {
         res.status(200).json(data);
       } else {
         res.status(404).json({ message: `Ticket number '${id}' not found` });
@@ -205,7 +195,6 @@ app.get('/tickets/:id', (req, res) => {
     });
 });
 
-
 // PATCH one ticket
 app.patch("/tickets/:id", (req, res) => {
   const { id } = req.params;
@@ -216,17 +205,19 @@ app.patch("/tickets/:id", (req, res) => {
     .where({ ticket_id: parseInt(id) })
     .update(updateFields)
     .then((updatedRows) => {
-      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });}
-      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
+      if (updatedRows === 0) {
+        res.status(404).json({ error: `Ticket id ${id} not found` });
+      } else {
+        res
+          .status(200)
+          .json({ message: `Ticket id ${id} updated successfully` });
+      }
     })
     .catch((error) => {
       console.error("Error updating ticket:", error);
       res.status(500).json({ error: "Internal server error" });
     });
 });
-
-
-
 
 // PUT an entirely new ticket, erroneously still performs like a PATCH
 
@@ -247,16 +238,21 @@ app.put("/tickets/:id", (req, res) => {
       create_date: newTicket.create_date,
       date_completed: newTicket.date_completed,
       priority_level_id: parseInt(newTicket.priority_level_id),
-      ticket_type_id: parseInt(newTicket.ticket_type_id)
+      ticket_type_id: parseInt(newTicket.ticket_type_id),
     };
-};
+  }
 
   knex("tickets")
     .where({ ticket_id: parseInt(id) })
     .update(fullTicket)
     .then((updatedRows) => {
-      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });}
-      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
+      if (updatedRows === 0) {
+        res.status(404).json({ error: `Ticket id ${id} not found` });
+      } else {
+        res
+          .status(200)
+          .json({ message: `Ticket id ${id} updated successfully` });
+      }
     })
     .catch((error) => {
       console.error("Error replacing ticket:", error);
@@ -268,50 +264,50 @@ app.put("/tickets/:id", (req, res) => {
 app.delete("/tickets/:id", (req, res) => {
   const { id } = req.params;
 
- // execute knex transaction to deal with foreign key references
-  knex.transaction(trx => {
-    return trx("ticket_updates")
-      .where({ ticket_id: parseInt(id) })
-      .del() // delete the ticket_id in "ticket_updates" table first because its referenced in that table
-      .then(() => {
-        return trx("tickets")
-          .where({ ticket_id: parseInt(id) })
-          .del(); // then delete it from the "tickets" table
-      })
-      .then(trx.commit)
-      .catch(trx.rollback);
-  })
-  .then(() => {
-    res.status(200).json({ message: `Ticket with id ${id} deleted.` });
-  })
-  .catch((error) => {
-    res.status(500).json({ message: `Error deleting ticket: ${error}` });
-  });
+  // execute knex transaction to deal with foreign key references
+  knex
+    .transaction((trx) => {
+      return trx("ticket_updates")
+        .where({ ticket_id: parseInt(id) })
+        .del() // delete the ticket_id in "ticket_updates" table first because its referenced in that table
+        .then(() => {
+          return trx("tickets")
+            .where({ ticket_id: parseInt(id) })
+            .del(); // then delete it from the "tickets" table
+        })
+        .then(trx.commit)
+        .catch(trx.rollback);
+    })
+    .then(() => {
+      res.status(200).json({ message: `Ticket with id ${id} deleted.` });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: `Error deleting ticket: ${error}` });
+    });
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
 });
 
-app.post("/account_request", async (req, res) => {
+app.post("/account_request", (req, res) => {
   knex("help_desk_users")
     .select("*")
     .where({ username: `${req.body.username}` })
     .then((username_list) => {
       if (username_list.length !== 0) {
-        res.status(409).send("no");
+        res.status(409).send();
       } else {
-        knex("account_request").insert({
-          id: knex("account_request").select("*").length,
-          name: req.body.name,
-          email: req.body.email,
-          accountType: req.body.accountType,
-          userName: req.body.username,
-          password: req.body.password,
-        });
-        res.status(202).send("Account Requested");
+        console.log(req.body.name);
+        knex("account_request")
+          .insert({
+            name: req.body.name,
+            email: req.body.email,
+            accountType: req.body.accountType,
+            userName: req.body.username,
+            password: req.body.password,
+          })
+          .then(res.status(202).send("Account Requested"));
       }
     });
 });

@@ -6,13 +6,16 @@ export const loggedInContext = createContext();
 export const LoggedInProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [ userType, setUserType ] = useState(0) //1=Admin, 2=Agent, 3=Supervisors, 4=Project Managers, 5=Auditor
+  const [ userId, setUserId ] = useState(0)
   return (
     <loggedInContext.Provider
       value={{
         loggedIn,
         setLoggedIn,
         userType,
-        setUserType
+        setUserType,
+        userId,
+        setUserId
       }}
     >
       {children}
