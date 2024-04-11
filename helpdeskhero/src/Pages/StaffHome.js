@@ -8,6 +8,7 @@ function StaffHome() {
   const [userPassword, setUserPassword] = useState("");
   const { loggedIn, setLoggedIn } = useContext(loggedInContext);
   const { userType, setUserType } = useContext(loggedInContext);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
