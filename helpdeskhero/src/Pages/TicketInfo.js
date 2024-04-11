@@ -34,7 +34,7 @@ function TicketInfo() {
       <h2>Ticket Details</h2>
       <p>Name: {ticket.customer_name}</p>
       <p>Email: {ticket.customer_email}</p>
-      <p>Equipment Type: {ticket.type}</p> {/* Display equipment name */}
+      <p>Equipment Type: {ticket.type}</p>
       <p>Status: {ticket.status}</p>
       <p>Priority: {ticket.severity}</p>
 

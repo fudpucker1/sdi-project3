@@ -244,7 +244,7 @@ app.put("/tickets/:id", (req, res) => {
     .update(fullTicket)
     .then((updatedRows) => {
 
-      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });} 
+      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });}
       else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
 
     })
@@ -263,7 +263,7 @@ app.delete("/tickets/:id", (req, res) => {
   // execute knex transaction to deal with foreign key references
   knex.transaction(trx => {
     return trx("ticket_updates")
-      .where({ ticket_id: parseInt(id) }) 
+      .where({ ticket_id: parseInt(id) })
       .del() // delete the ticket_id in "ticket_updates" table first because its referenced in that table
       .then(() => {
         return trx("tickets")
