@@ -11,3 +11,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#scroll-container {
+border: 3px solid black;
+border-radius: 5px;
+overflow: hidden;
+text-wrap:nowrap;
+font-size: large;
+}
+
+#scroll-text {
+/* animation properties */
+-moz-transform: translateX(100vw);
+-webkit-transform: translateX(100vw);
+transform: translateX(100vw);
+
+-moz-animation: my-animation 35s linear infinite;
+-webkit-animation: my-animation 35s linear infinite;
+animation: my-animation 35s linear infinite;
+}
+
+/* for Firefox */
+@-moz-keyframes my-animation {
+from { -moz-transform: translateX(100vw); }
+to { -moz-transform: translateX(-300vw); }
+}
+
+/* for Chrome */
+@-webkit-keyframes my-animation {
+from { -webkit-transform: translateX(100vw); }
+to { -webkit-transform: translateX(-300vw); }
+}
+
+@keyframes my-animation {
+from {
+  -moz-transform: translateX(100vw);
+  -webkit-transform: translateX(100vw);
+  transform: translateX(100vw);
+}
+to {
+  -moz-transform: translateX(-300vw);
+  -webkit-transform: translateX(-300vw);
+  transform: translateX(-300vw);
+}
+}

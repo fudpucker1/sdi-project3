@@ -34,8 +34,8 @@ function StaffHome() {
   };
 
   const handleNewAccount = () => {
-    // navigate("/new-account"); commented out for now to commit other changes, getting an error
-  };
+    navigate("/new-account");
+    };
 
   const LogOut = () => {
     setLoggedIn(false);
@@ -44,6 +44,7 @@ function StaffHome() {
   return loggedIn ? (
     <>
       <h1>Welcome to the Staff Home Page</h1>
+      <NewsBar />
       <div style={{ paddingBottom: "40%" }}>
         <div className="row mt-5">
           <div className="col-7">
@@ -90,7 +91,7 @@ function StaffHome() {
               }}
             >
               <h4 className="mt-3">News/Outages</h4>
-              <NewsBar />
+
             </div>
           </div>
         </div>
