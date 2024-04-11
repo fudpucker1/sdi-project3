@@ -168,9 +168,9 @@ app.get("/", (req, res) => {
 app.get("/tickets", (req, res) => {
   knex("tickets")
     .select("*")
-    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
-    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
-    .join('priority_levels', 'priority_id', 'priority_level_id')
+    .leftJoin('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .leftJoin('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .leftJoin('priority_levels', 'priority_id', 'priority_level_id')
     .then((tickets) => {
       res.status(200).json(tickets);
     })
@@ -187,11 +187,10 @@ app.get('/tickets/:id', (req, res) => {
   knex('tickets')
     .select('*')
     .where('ticket_id', id)
-    .join('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
-    .join('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
-    .join('priority_levels', 'priority_id', 'priority_level_id')
+    .leftJoin('help_desk_users', 'help_desk_users.user_id', 'tickets.assigned_to')
+    .leftJoin('equipment', 'equipment.equipment_id', 'tickets.equipment_id')
+    .leftJoin('priority_levels', 'priority_id', 'priority_level_id')
     .then(data => {
-
     if (data.length > 0) {
         res.status(200).json(data);
       } else {
@@ -203,6 +202,29 @@ app.get('/tickets/:id', (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     });
 });
+
+
+app.get("/updates", (req, res) => {
+  knex("ticket_updates")
+  .select("*")
+  .leftJoin('help_desk_users', 'help_desk_users.user_id', 'ticket_updates.help_desk_users_id')
+  .then((update) => {
+    if (update.length === 0) {
+      res.status(404).json({ error: "Update not found" });
+    } else {
+      res.status(200).json(update);
+    }})})
+
+app.get("/help_desk_users", (req, res) => {
+  knex("help_desk_users")
+    .select("*")
+    .then((user) => {
+      if (user.length === 0) {
+        res.status(404).json({ error: "Users not found" });
+      } else {
+        res.status(200).json(user);
+      }
+})})
 
 //status page, get tickets
 app.get('/statustickets/:id', (req, res) => {
@@ -249,24 +271,39 @@ app.get('/ticketupdates/:id', (req, res) => {
 });
 
 
-// PATCH one ticket
-app.patch("/tickets/:id", (req, res) => {
-  const { id } = req.params;
-  const updateFields = req.body;
+// PATCH updates to the ticket_updates & tickets tables
+app.patch("/tickets", (req, res) => {
+  const ticket_update = req.body;
 
   knex("tickets")
-    .select("*")
-    .where({ ticket_id: parseInt(id) })
-    .update(updateFields)
-    .then((updatedRows) => {
-      if (updatedRows === 0) {res.status(404).json({ error: `Ticket id ${id} not found` });}
-      else {res.status(200).json({ message: `Ticket id ${id} updated successfully` });}
+    .where("ticket_id", ticket_update.ticket_id)
+    .update({status: ticket_update.status,
+             assigned_to: ticket_update.assigned_to
+          })
+    .then(() => {res.status(201).json({ message: "Ticket update inserted successfully" });})
+    .catch((error) => {res.status(500).json({ error: "Internal server error" });});
+
+
+});
+
+app.patch("/ticket_updates", (req, res) => {
+  const ticket_update = req.body;
+  knex("ticket_updates")
+    .insert({
+      date_created: ticket_update.date_created,
+      body: ticket_update.body,
+      help_desk_users_id: ticket_update.help_desk_users_id,
+      ticket_id: ticket_update.ticket_id
     })
+    .then(() => {res.status(201).json({ message: "Ticket update inserted successfully" });})
     .catch((error) => {
       console.error("Error updating ticket:", error);
       res.status(500).json({ error: "Internal server error" });
     });
-});
+  });
+
+
+
 
 // PUT an entirely new ticket, erroneously still performs like a PATCH
 app.put("/tickets/:id", (req, res) => {
@@ -328,12 +365,6 @@ app.delete("/tickets/:id", (req, res) => {
   });
 });
 
-
-
-app.listen(port, () => {
-  console.log(`Server is listening to ${port}`);
-});
-
 app.post("/account_request", async (req, res) => {
   knex("help_desk_users")
     .select("*")
@@ -354,3 +385,8 @@ app.post("/account_request", async (req, res) => {
       }
     });
 });
+
+app.listen(port, () => {
+  console.log(`Server is listening to ${port}`);
+});
+
