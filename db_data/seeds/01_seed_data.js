@@ -181,6 +181,29 @@ exports.seed = async function(knex, Promise) {
         date_completed: null,
         priority_level_id: 2,
         ticket_type_id: 2
+      },
+      {
+
+        equipment_id: 7,
+        status: 'Open',
+        description: 'Server connection issues',
+        customer_name: 'Michael Brown',
+        customer_email: 'michael.brown.36@spaceforce.mil',
+        create_date: '2024-04-05',
+        date_completed: null,
+        priority_level_id: 3,
+        ticket_type_id: 2
+      },
+      {
+        equipment_id: 10,
+        status: 'Open',
+        description: 'Server connection issues',
+        customer_name: 'Michael Brown',
+        customer_email: 'michael.brown.36@spaceforce.mil',
+        create_date: '2024-04-05',
+        date_completed: null,
+        priority_level_id: 1,
+        ticket_type_id: 2
       }
     ])
   })
