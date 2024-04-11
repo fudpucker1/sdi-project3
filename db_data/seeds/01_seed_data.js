@@ -212,9 +212,9 @@ exports.seed = async function(knex, Promise) {
   .then(() => {
     return knex('ticket_updates').insert([
       // Ticket 1 updates
-      { help_desk_users_id: 2, ticket_id: 1, body: 'Investigated the issue.', date_created: '2024-04-01 12:30:00' },
-      { help_desk_users_id: 3, ticket_id: 1, body: 'Replaced faulty RAM.', date_created: '2024-04-01 12:30:00' },
-      { help_desk_users_id: 2, ticket_id: 1, body: 'Confirmed issue resolved.', date_created: '2024-04-01 12:30:00' },
+      { help_desk_users_id: 2, ticket_id: 1, body: 'Investigated the issue.', date_created: '2024-04-01T12:30:00' },
+      { help_desk_users_id: 3, ticket_id: 1, body: 'Replaced faulty RAM.', date_created: '2024-04-01T12:30:00' },
+      { help_desk_users_id: 2, ticket_id: 1, body: 'Confirmed issue resolved.', date_created: '2024-04-01T12:30:00' },
 
       // Ticket 2 updates
       {help_desk_users_id: 3, ticket_id: 2, body: 'Investigating server performance.', date_created: '2024-04-02 12:30:00' },

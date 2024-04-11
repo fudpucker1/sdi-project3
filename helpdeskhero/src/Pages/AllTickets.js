@@ -8,7 +8,7 @@ function AllTickets() {
   const [selectedTickets, setSelectedTickets] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/tickets/')
+    fetch('http://localhost:8080/tickets')
       .then(response => response.json())
       .then(data => {
         setTickets(data);
