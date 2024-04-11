@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import { loggedInContext } from "./Logged-In-context";
+import { YourTickets, NewsBar, UnassignedTickets } from "./StaffHome_components";
 
 function StaffHome() {
   const [userName, setUserName] = useState("");
@@ -25,7 +26,7 @@ function StaffHome() {
         let jsonres = await res.json();
         setLoggedIn(true);
         setUserType(jsonres[0].user_type_id);
-        setUserId(jsonres[0].id);
+        setUserId(jsonres[0].user_id);
       } else {
         alert("Username/Password not found!");
       }
@@ -55,7 +56,8 @@ function StaffHome() {
                 marginLeft: 15,
               }}
             >
-              <h4 className="mt-3">New/Unassigned Tickets</h4>
+              <h4 className="mt-3">Unassigned Tickets</h4>
+              <UnassignedTickets />
             </div>
           </div>
 
@@ -69,7 +71,8 @@ function StaffHome() {
                 marginRight: 15,
               }}
             >
-              <h4 className="mt-3">Your Tickets</h4>
+              <h4 className="mt-3">Your Open Tickets</h4>
+              <YourTickets />
             </div>
           </div>
         </div>
@@ -87,6 +90,7 @@ function StaffHome() {
               }}
             >
               <h4 className="mt-3">News/Outages</h4>
+              <NewsBar />
             </div>
           </div>
         </div>
