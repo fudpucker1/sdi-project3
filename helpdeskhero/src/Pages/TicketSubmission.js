@@ -149,7 +149,7 @@ function TicketSubmission() {
         <br/>
 
         <label style={{ marginBottom: 25}}>
-          <select value={ticketType} style={{ display: 'flex', flexDirection: 'column', paddingLeft: 70, borderRadius: 5, textAlign: 'center' }} onChange={(e) => setTicketType(e.target.value)}>
+          <select value={ticketType} style={{ display: 'flex', flexDirection: 'column', paddingLeft: 70, borderRadius: 5}} onChange={(e) => setTicketType(e.target.value)}>
             <option value="">Ticket Type</option>
             <option value="1">Technical Issue</option>
             <option value="2">User Support</option>

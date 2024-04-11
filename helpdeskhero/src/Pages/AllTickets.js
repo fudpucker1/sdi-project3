@@ -48,7 +48,7 @@ function AllTickets() {
 
 
   return (
-    <div style={{paddingBottom: '60%'}}>
+    <div style={{paddingBottom: '70%'}}>
       <h1>Welcome to the All Tickets Page</h1>
       <br/>
       <div>
@@ -60,17 +60,18 @@ function AllTickets() {
           onChange={handleSearchInputChange}
         />
       </div>
-      <br/>
-      <table>
+      <br />
+      <div style={{margin: 10}}>
+      <table className="table table-light table-striped" style={{border: '1px solid black', textAlign: 'start'}}>
         <thead>
           <tr>
             <th></th>
-            <th style={{paddingRight: 20, paddingLeft: 150}}>ID</th>
-            <th style={{paddingRight: 20}}>Date</th>
+            <th style={{paddingRight: 20, paddingLeft: 25}}>ID</th>
+            <th style={{paddingRight: 5}}>Date</th>
             <th style={{paddingRight: 20}}>Status</th>
             <th style={{paddingRight: 20}}>Customer</th>
-            <th style={{paddingRight: 20}}>Assigned to:</th>
-            <th style={{paddingRight: 20}}>E-mail</th>
+            <th style={{paddingRight: 30}}>Technician</th>
+            {/* <th style={{paddingRight: 20}}>E-mail</th> */}
             <th style={{paddingRight: 20}}>Equipment</th>
             <th style={{paddingRight: 20}}>Description</th>
             <th style={{paddingRight: 20}}>Severity</th>
@@ -82,11 +83,12 @@ function AllTickets() {
               <td>
                 <input
                   type="checkbox"
+                  style={{marginLeft: 20}}
                   checked={selectedTickets.includes(ticket.ticket_id)}
                   onChange={() => handleCheckboxChange(ticket.ticket_id)}
                 />
               </td>
-              <td>
+              <td style={{textAlign: 'center'}}>
                 <Link to={`/ticket-info/${ticket.ticket_id}`}>
                   {ticket.ticket_id}
                 </Link>
@@ -95,18 +97,19 @@ function AllTickets() {
               <td>{ticket.status}</td>
               <td>{ticket.customer_name}</td>
               <td>{ticket.username}</td>
-              <td>{ticket.customer_email}</td>
+              {/* <td>{ticket.customer_email}</td> */}
               <td>{ticket.model}, {ticket.serial_number}</td>
               <td>{ticket.description}</td>
               <td>{ticket.severity}</td>
             </tr>
           ))}
         </tbody>
-      </table>
-      <div style={{marginTop: 30}} >
+        </table>
+        </div>
+      {/* <div style={{marginTop: 30}} >
       <button className="btn btn-dark" style={{marginRight: 10}} onClick={handleDeleteSelected}>Delete Selected</button>
         <button className="btn btn-dark" onClick={handleChangeAssignedTo}>Change Assigned To</button>
-        </div>
+        </div> */}
     </div>
   );
 }

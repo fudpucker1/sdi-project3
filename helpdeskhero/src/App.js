@@ -25,7 +25,7 @@ export default function App() {
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/submit-ticket">Submit Ticket</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/ticket-status">Ticket Status</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/all-tickets">All Tickets</Link></li>
-            <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/post-submission">Post Submission</Link></li>
+            {/* <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/post-submission">Post Submission</Link></li> */}
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/faq">FAQs</Link></li>
             <li style={{ display: 'flex', marginRight: '10px' }} className="list-group-item"><Link to="/staff">Staff Home</Link></li>
         </ul>
