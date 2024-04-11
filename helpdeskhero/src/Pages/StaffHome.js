@@ -6,8 +6,7 @@ import { loggedInContext } from "./Logged-In-context";
 function StaffHome() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const { loggedIn, setLoggedIn } = useContext(loggedInContext);
-  const { userType, setUserType } = useContext(loggedInContext);
+  const { loggedIn, setLoggedIn, userType, setUserType, userId, setUserId } = useContext(loggedInContext);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -26,7 +25,7 @@ function StaffHome() {
         let jsonres = await res.json();
         setLoggedIn(true);
         setUserType(jsonres[0].user_type_id);
-        console.log(jsonres[0].user_type_id);
+        setUserId(jsonres[0].id);
       } else {
         alert("Username/Password not found!");
       }

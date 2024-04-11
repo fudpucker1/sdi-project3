@@ -314,10 +314,9 @@ app.post("/account_request", async (req, res) => {
     .where({ username: `${req.body.username}` })
     .then((username_list) => {
       if (username_list.length !== 0) {
-        res.status(409).send("no");
+        res.status(409).send();
       } else {
         knex("account_request").insert({
-          id: knex("account_request").select("*").length,
           name: req.body.name,
           email: req.body.email,
           accountType: req.body.accountType,
@@ -325,6 +324,5 @@ app.post("/account_request", async (req, res) => {
           password: req.body.password,
         });
         res.status(202).send("Account Requested");
-      }
+      }})
     });
-});
