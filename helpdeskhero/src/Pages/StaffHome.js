@@ -34,7 +34,7 @@ function StaffHome() {
   };
 
   const handleNewAccount = () => {
-    // navigate("/new-account"); commented out for now to commit other changes, getting an error
+    navigate("/new-account"); 
   };
 
   const LogOut = () => {
