@@ -157,11 +157,7 @@ app.patch("/updatepassword", (req, res) => {
   knex("help_desk_users")
     .where(`username = ${req.body.username}`)
     .update("password", req.body.password);
-  res.status(201).send("Password updated").cookie();
-});
-
-app.get("/", (req, res) => {
-  res.send("Express is up and running");
+  res.status(201).send("Password updated");
 });
 
 // Trinh search branch
