@@ -5,9 +5,8 @@ function TicketInfo() {
   const { id } = useParams();
 
   const [ticket, setTicket] = useState(null);
-  const [assignedTo, setAssignedTo] = useState();
+  const [assignedTo, setAssignedTo] = useState('');
   const [updates, setUpdates] = useState('');
-  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/tickets/${id}`)
@@ -15,8 +14,6 @@ function TicketInfo() {
       .then(data => setTicket(data))
       .catch(error => console.error('Error:', error));
   }, [id]);
-
-  console.log(ticket)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,24 +41,24 @@ function TicketInfo() {
       <h2>Ticket Details</h2>
       <p>Name: {ticket.customer_name}</p>
       <p>Email: {ticket.customer_email}</p>
-      <p>Equipment Type: {ticket.type}</p> {/* Display equipment name */}
+      <p>Equipment Type: {ticket.type}</p>
       <p>Status: {ticket.status}</p>
       <p>Priority: {ticket.severity}</p>
       <p>Currently assigned to: {ticket.assigned_to}</p>
-      
+
       {
       isDeleted ? <p>Ticket deleted.</p> : <button onClick={() => handleDelete()}>Delete Ticket</button>
       }
-      
+
       <h2>Assign Ticket</h2>
 
       <form onSubmit={handleSubmit}>
-
-        <label>Assigned To:
+        <label>
+          Assigned To:
           <input type="text" value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)} />
         </label>
-
-        <label>Updates:
+        <label>
+          Updates:
           <textarea value={updates} onChange={(e) => setUpdates(e.target.value)} />
         </label>
 

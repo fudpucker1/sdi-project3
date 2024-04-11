@@ -4,18 +4,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 function TicketStatus() {
   const navigate = useNavigate();
-
   const [ticketId, setTicketId] = useState('');
-
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Ticket Id:', ticketId);
     navigate(`/ticket-info/${ticketId}`);
   };
-
-
 
   return (
     <div style={{paddingBottom: '50%'}}>
@@ -33,8 +28,10 @@ function TicketStatus() {
         </div>
 
       <div className='col-6'>
-          <div className='status-info' style={{border: '1px solid black', borderRadius: 5, paddingBottom: '90%', marginRight: 15}}>
-            <h4 className='mt-3'>Status Info</h4>
+        <h3 className='mt-3' style={{marginRight: 80}}>Status Info</h3>
+          <div className='status-info' style={{border: '1px solid black', borderRadius: 5, paddingBottom: '90%', marginRight: 80}}>
+            {/* <h4 className='mt-3'>Status Info</h4> */}
+
         </div>
         </div>
         </div>
