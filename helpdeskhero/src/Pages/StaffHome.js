@@ -78,23 +78,6 @@ function StaffHome() {
           </div>
         </div>
 
-        <div className="row mt-5">
-          <div className="col-12">
-            <div
-              className="status-info"
-              style={{
-                border: "1px solid black",
-                borderRadius: 5,
-                paddingBottom: "25%",
-                marginLeft: 15,
-                marginRight: 15,
-              }}
-            >
-              <h4 className="mt-3">News/Outages</h4>
-
-            </div>
-          </div>
-        </div>
         <button className="mt-4 btn btn-dark btn-lg" onClick={() => LogOut()}>
           Log Out
         </button>

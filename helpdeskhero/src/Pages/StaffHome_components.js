@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { loggedInContext } from "./Logged-In-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export const YourTickets = () => {
   const { loggedIn, userType, userId } = useContext(loggedInContext);
@@ -114,14 +114,35 @@ export const NewsBar = () => {
   return (
     <div id="scroll-container">
       <div id="scroll-text">
-        ................................................
-        This is scrolling text.....................................................................................
-        ALERT: We will be starting our new schedule of 15hr shifts effective 17:00 today...................................
-        The finance office is on their 24th week of "Training" Vacation days on their Cruise tour around European Coastlines.................................
-        The next 15 snow-days are canceled as per CMSSF Orders...............................................................
-        Our next Government Shutdown is scheduled to start in "-15" days...............................................................
-        Welcome aboard Hell Diver!..................................................
+        ................................................ This is scrolling
+        text.....................................................................................
+        ALERT: We will be starting our new schedule of 15hr shifts effective
+        17:00 today................................... The finance office is on
+        their 24th week of "Training" Vacation days on their Cruise tour around
+        European Coastlines................................. The next 15
+        snow-days are canceled as per CMSSF
+        Orders...............................................................
+        Our next Government Shutdown is scheduled to start in "-15"
+        days...............................................................
+        Welcome aboard Hell
+        Diver!..................................................
       </div>
     </div>
+  );
+};
+
+export const Loginbutton = () => {
+  const { loggedIn, setLoggedIn } = useContext(loggedInContext);
+  const navigate = useNavigate();
+
+  const handleOnClick = () => {
+   setLoggedIn(false)
+   navigate('/home')
+  }
+
+  return loggedIn ? (
+    <button type="button" onClick={() => handleOnClick()} class="btn btn-dark">Log Out</button>
+  ) : (
+    <button type="button" onClick={() => navigate('/staff')} class="btn btn-dark">Log In</button>
   );
 };
