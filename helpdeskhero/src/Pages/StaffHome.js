@@ -7,7 +7,9 @@ import { YourTickets, NewsBar, UnassignedTickets } from "./StaffHome_components"
 function StaffHome() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+
   const { loggedIn, setLoggedIn, userType, setUserType, userId, setUserId } = useContext(loggedInContext);
+
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
