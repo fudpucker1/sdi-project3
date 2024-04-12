@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import { loggedInContext } from "./Logged-In-context";
@@ -7,6 +7,10 @@ import { YourTickets, NewsBar, UnassignedTickets } from "./StaffHome_components"
 function StaffHome() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [userRequestData, setUserRequestData] = useState([]);
+  const [accountTypeData, setAccountTypeData] = useState([]);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
 
   const { loggedIn, setLoggedIn, setUserType, setUserId } = useContext(loggedInContext);
 
@@ -35,12 +39,111 @@ function StaffHome() {
     });
   };
 
+  // Fetch pending user account request
+  useEffect(() => {
+    fetch(`http://localhost:8080/pendingaccountrequest`)
+      .then(response => response.json())
+      .then(data => {
+        setUserRequestData(data);
+      })
+      .catch(error => console.error('Error:', error));
+  }, [isDeleted]); // Add isDeleted to dependency array to refetch data when an account request is deleted
+
+  // Fetch account_type data
+  useEffect(() => {
+    fetch(`http://localhost:8080/accounttype`)
+      .then(response => response.json())
+      .then(data => {
+        setAccountTypeData(data);
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
+
   const handleNewAccount = () => {
     navigate("/new-account");
-    };
+  };
 
   const LogOut = () => {
     setLoggedIn(false);
+  };
+
+  const handleApproveNewAccount = async () => {
+    /*
+
+    const approvedAccountDataRaw = userRequestData.find(request => request.id === selectedRequestId);
+    //const accountTypeID = accountTypeData.find(type => type.name === approvedAccountDataRaw.accountType);
+
+    console.log(userRequestData)
+    console.log(approvedAccountDataRaw)
+    console.log(selectedRequestId)
+    //console.log(accountTypeID)
+    //console.log(accountTypeData)
+
+    const approvedAccountData = {
+      username: approvedAccountDataRaw.name,
+      password: approvedAccountDataRaw.email,
+      user_type_id: accountTypeID.user_type_id
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8080/createtnewuser`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(approvedAccountData),
+      });
+      //deleteAccountAfterCreation();
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setIsDeleted(true); // Trigger refetch of pending account requests
+    } catch (error) {
+      console.error('Error approving account request:', error);
+      alert('Error approving account request. Please try again.');
+    }
+    */
+  };
+
+  const deleteAccountAfterCreation = async () => {
+
+    console.log(selectedRequestId)
+    try {
+      const response = await fetch(`http://localhost:8080/pendingaccountrequest/${selectedRequestId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setIsDeleted(true); // Trigger refetch of pending account requests
+    } catch (error) {
+      console.error('Error denying account request:', error);
+      alert('Error denying account request. Please try again.');
+    }
+  };
+
+  const handleDenyNewAccount = async () => {
+    /*
+    if (window.confirm('Are you sure you want to deny this account request?')) {
+      try {
+        const response = await fetch(`http://localhost:8080/pendingaccountrequest/${selectedRequestId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        setIsDeleted(true); // Trigger refetch of pending account requests
+      } catch (error) {
+        console.error('Error denying account request:', error);
+        alert('Error denying account request. Please try again.');
+      }
+    }
+    */
   };
 
   return loggedIn ? (
@@ -59,6 +162,35 @@ function StaffHome() {
                 marginLeft: 15,
               }}
             >
+            {userType === 1 && (
+              <>
+                <h4 className="mt-3">Pending Account Request</h4>
+                <ul style={{
+                border: "1px solid black",
+                borderRadius: 5,
+                paddingBottom: 15,
+                marginLeft: 15,
+                marginRight: 15
+              }}>
+                  {userRequestData.map(request => (
+                    <ul key={request.id}>
+                      <p>Name: {request.name}</p>
+                      <p>Email: {request.email}</p>
+                      <p>Type: {request.accountType}</p>
+                      <p>Password: {request.password}</p>
+                      <button onClick={() => {
+                        setSelectedRequestId(request.id);
+                        handleApproveNewAccount();
+                      }}>Approve</button>
+                      <button onClick={() => {
+                        setSelectedRequestId(request.id);
+                        handleDenyNewAccount();
+                      }}>Deny</button>
+                    </ul>
+                  ))}
+                </ul>
+              </>
+            )}
               <h4 className="mt-3">Unassigned Tickets</h4>
               <UnassignedTickets />
             </div>

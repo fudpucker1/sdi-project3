@@ -29,14 +29,15 @@ function AllTickets() {
 
   const filterTickets = (query) => {
     const filtered = tickets.filter(ticket =>
-      ticket.description.toLowerCase().includes(query.toLowerCase()) ||
+      ticket.ticket_id.toString().includes(query.toString()) ||
+      ticket.status.toLowerCase().includes(query.toLowerCase()) ||
       ticket.customer_name.toLowerCase().includes(query.toLowerCase()) ||
-      ticket.customer_email.toLowerCase().includes(query.toLowerCase()) ||
-      ticket.equipment_id.toLowerCase().includes(query.toLowerCase()) ||
+      // ticket.username.toLowerCase().includes(query.toLowerCase()) ||
       ticket.severity.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredTickets(filtered);
   };
+
 
   const handleCheckboxChange = (ticketId) => {
     if (selectedTickets.includes(ticketId)) {
@@ -47,13 +48,46 @@ function AllTickets() {
   };
 
 
+  // SORTING FEATURES
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' }); // default direction is ascending
+
+  // key is the table["key"]
+  // direction is either 'ascending' or 'descending'
+  const onSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') { // if its already ascending
+      direction = 'descending'; // then clicking sort will change it to descending
+    }
+    setSortConfig({ key, direction }); // set the key and direction into the sortConfig state
+
+    // let sortedTickets = [...filteredTickets]; // sorted tickets is the array of filteredTickets, todo: might need to pull from a state
+    if (sortConfig !== null) {
+      // sort the sortedTickets array
+      filteredTickets.sort((a, b) => { // the sort method mutates this array
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+  };
+
+
+
+
+
+
   return (
     <div style={{paddingBottom: '70%'}}>
       <h1>Welcome to the All Tickets Page</h1>
       <br/>
       <div>
         <input
-          type="text"
+          type="search"
           style={{paddingLeft: 60, paddingRight: 60, borderRadius: 5, textAlign: 'center'}}
           placeholder="Search tickets..."
           value={searchQuery}
@@ -66,15 +100,15 @@ function AllTickets() {
         <thead>
           <tr>
             <th></th>
-            <th style={{paddingRight: 20, paddingLeft: 25}}>ID</th>
-            <th style={{paddingRight: 5}}>Date</th>
-            <th style={{paddingRight: 20}}>Status</th>
-            <th style={{paddingRight: 20}}>Customer</th>
-            <th style={{paddingRight: 30}}>Technician</th>
+            <th style={{paddingRight: 20, paddingLeft: 25}}><button type="button" onClick={() => onSort('ticket_id')}>ID</button></th>
+            <th style={{paddingRight: 5}}><button type="button" onClick={() => onSort('date_created')}>Date</button></th>
+            <th style={{ paddingRight: 20 }}><button type="button" onClick={() => onSort('status')}>Status</button></th>
+            <th style={{paddingRight: 20}}><button type="button" onClick={() => onSort('customer_name')}>Customer</button></th>
+            <th style={{paddingRight: 30}}><button type="button" onClick={() => onSort('username')}>Technician</button></th>
             {/* <th style={{paddingRight: 20}}>E-mail</th> */}
-            <th style={{paddingRight: 20}}>Equipment</th>
-            <th style={{paddingRight: 20}}>Description</th>
-            <th style={{paddingRight: 20}}>Severity</th>
+            <th style={{paddingRight: 20}}><button type="button" onClick={() => onSort('type')}>Equipment</button></th>
+            <th style={{paddingRight: 20}}><button type="button" onClick={() => onSort('description')}>Description</button></th>
+            <th style={{paddingRight: 20}}><button type="button" onClick={() => onSort('severity')}>Severity</button></th>
           </tr>
         </thead>
         <tbody>
