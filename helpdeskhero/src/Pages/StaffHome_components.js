@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { loggedInContext } from "./Logged-In-context";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 export const YourTickets = () => {
@@ -32,7 +32,6 @@ export const YourTickets = () => {
   return (
     <div>
       {assignedTickets.map((ticket) => {
-        console.log(ticket.ticket_id);
         return (
           <div
             key={ticket.ticket_id}

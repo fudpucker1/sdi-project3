@@ -13,7 +13,6 @@ function TicketInfo() {
   const [status, setStatus] = useState();
   const [submitted, setSubmitted] = useState(false);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,10 +90,9 @@ function TicketInfo() {
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); })
     ])
-      //.then(() => window.location.reload(true))
+      // .then(() => window.location.reload(true))
       .catch(error => console.error('Error refreshing page:', error));
-
-      setSubmitted(!submitted);
+      setSubmitted(!submitted)
   };
 
   const handleDelete = () => {
@@ -111,102 +109,99 @@ function TicketInfo() {
   }
 
   return (
-  <>
-        <div style={{ paddingBottom: '50%' }}>
-          <h1>Your ticket ID is: {id}</h1>
-          <h3>Ticket Details</h3>
-          <div style={{ margin: 15 }}>
-            <table className="table table-light table-striped" style={{ border: '1px solid black', textAlign: 'start' }}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Equipment Type</th>
-                  <th>Status</th>
-                  <th>Priority</th>
-                  <th>Assigned To</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{ticket[0].customer_name}</td>
-                  <td>{ticket[0].customer_email}</td>
-                  <td>{ticket[0].type}</td>
-                  <td>{ticket[0].status}</td>
-                  <td>{ticket[0].severity}</td>
-                  <td>{ticket[0].username}</td>
-                  <td style={{ textAlign: 'center' }}>
+    <div style={{ paddingBottom: '50%' }}>
+      <h1>Your ticket ID is: {id}</h1>
 
-                    {
-                      isDeleted ? <p>Ticket deleted.</p> : <button class="btn btn-danger btn-sm" onClick={() => handleDelete()}>Delete Ticket</button>
-                    }
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <h3>Ticket Details</h3>
+      <div style={{margin: 15}}>
+      <table className="table table-light table-striped" style={{border: '1px solid black', textAlign: 'start'}}>
+      <thead>
+      <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Equipment Type</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
 
-          <div className="row" style={{ marginTop: 55 }}>
-            <div className='col-12'>
+      <td>{ticket[0].customer_name}</td>
+      <td>{ticket[0].customer_email}</td>
+      <td>{ticket[0].type}</td>
+      <td>{ticket[0].status}</td>
+      <td>{ticket[0].severity}</td>
+      <td style={{textAlign: 'center'}}>
+      {
+        isDeleted ? <p>Ticket deleted.</p> : <button class="btn btn-danger btn-sm" onClick={() => handleDelete()}>Delete Ticket</button>
+      }
+      </td>
+      </tr>
+      </tbody>
+      </table>
+      </div>
 
-              <form className="justify-content-around" style={{ display: 'flex', flexDirection: 'row' }} onSubmit={handleSubmit}>
+      <div className="row" style={{ marginTop: 55 }}>
+        <div className='col-12'>
 
-                <label>
-                  <h2>Assign Ticket</h2>
-                  <p>Assign a tech to the ticket</p>
-                  Assign To:
-                  <select style={{ marginLeft: 15, textAlign: 'center' }} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
-                    <option key='' value=''> Select User... </option>
-                    {allUsers.map((user, index) => (
-                      <option key={index} value={user.user_id}> {user.username} </option>
-                    ))}
-                  </select>
-                </label>
+      <form className="justify-content-around" style={{display: 'flex', flexDirection: 'row'}} onSubmit={handleSubmit}>
+
+            <label>
+              <h2>Assign Ticket</h2>
+          <p>Assign a tech to the ticket</p>
+          Assign To:
+          <select style={{marginLeft: 15, textAlign:'center'}} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
+            <option key='' value=''> Select User... </option>
+            {allUsers.map((user, index) => (
+              <option key={index} value={user.user_id}> {user.username} </option>
+            ))}
+          </select>
+        </label>
 
 
-                <label>
-                  <h2>Status Update</h2>
-                  <p>Update the status of the ticket</p>
-                  <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                    <option key='0' value={ticket[0].status}> Select Updated Status... </option>
-                    <option key='1' value='Open'> Open </option>
-                    <option key='2' value='In Progress'> In Progress </option>
-                    <option key='3' value='Closed'> Closed </option>
-                  </select>
-                </label>
+            <label>
+                <h2>Status Update</h2>
+            <p>Update the status of the ticket</p>
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option key='0' value={ticket[0].status}> Select Updated Status... </option>
+            <option key='1' value='Open'> Open </option>
+            <option key='2' value='In Progress'> In Progress </option>
+            <option key='3' value='Closed'> Closed </option>
+          </select>
+        </label>
 
-                <div className="update-list">
-                  <h2>Ticket Updates</h2>
-                  <ul>
-                    {updates.map((update, index) => {
-                      if (update.ticket_id == id) {
-                        return (
-                          <li key={index}>
-                            <p>Date: {update.date_created} </p>
-                            <p>Technician: {update.username} </p>
-                            <p>Update: {update.body} </p>
-                            <p></p>
-                          </li>
-                        )
-                      } else {
-                        return null;
-                      }
-                    })}
-                  </ul>
-                  <br />
+        <div className="update-list">
+          <h2>Ticket Updates</h2>
+          <ul>
+            {updates.map((update, index) => {
+              if (update.ticket_id === id) {
+                return (
+                  <li key={index}>
+                    <p>Date: {update.date_created} </p>
+                    <p>Technician: {update.username} </p>
+                    <p>Update: {update.body} </p>
+                    <p></p>
+                  </li>
+                )
+              } else {
+                return null;
+              }
+            })}
+              </ul>
+              <br/>
                   <label>Updates:
-                    <input type="text" style={{ marginLeft: 10 }} value={userUpdates} onChange={(e) => setUserUpdates(e.target.value)} placeholder="Your text here..." />
-                  </label>
+          <input type="text" style={{marginLeft: 10}} value={userUpdates} onChange={(e) => setUserUpdates(e.target.value)} placeholder="Your text here..." />
+        </label>
 
-                  <button className="btn btn-dark btn-sm" style={{ marginLeft: 10 }} type="submit">Submit</button>
-                </div>
-
-              </form>
-            </div>
-          </div>
+        <button className="btn btn-dark btn-sm" style={{marginLeft: 10}} type="submit">Submit</button>
         </div>
-</>
+
+        </form>
+        </div>
+        </div>
+    </div>
   );
 }
 
