@@ -111,27 +111,54 @@ function TicketInfo() {
   }
 
   return (
-    <div>
-      <h1>Welcome to the Ticket Info Page. Your ticket ID is: {id}</h1>
 
-      <h2>Ticket Details</h2>
-      <p>Name: {ticket[0].customer_name}</p>
-      <p>Email: {ticket[0].customer_email}</p>
-      <p>Equipment Type: {ticket[0].type}</p>
-      <p>Status: {ticket[0].status}</p>
-      <p>Priority: {ticket[0].severity}</p>
-      <p>Assigned To: {ticket[0].username}</p>
+    <div>
+      <h1>Your ticket ID is: {id}</h1>
+    <div style={{ paddingBottom: '50%' }}>
+      <h1>Your ticket ID is: {id}</h1>
+      <h3>Ticket Details</h3>
+      <div style={{margin: 15}}>
+      <table className="table table-light table-striped" style={{border: '1px solid black', textAlign: 'start'}}>
+      <thead>
+      <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Equipment Type</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Assigned To</th>
+      <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td>{ticket[0].customer_name}</td>
+      <td>{ticket[0].customer_email}</td>
+      <td>{ticket[0].type}</td>
+      <td>{ticket[0].status}</td>
+      <td>{ticket[0].severity}</td>
+      <td>{ticket[0].username}</td>
+      <td style={{textAlign: 'center'}}>
 
       {
-        isDeleted ? <p>Ticket deleted.</p> : <button onClick={() => handleDelete()}>Delete Ticket</button>
+        isDeleted ? <p>Ticket deleted.</p> : <button class="btn btn-danger btn-sm" onClick={() => handleDelete()}>Delete Ticket</button>
       }
+      </td>
+      </tr>
+      </tbody>
+      </table>
+      </div>
 
-      <h2>Assign Ticket</h2>
-      <form onSubmit={handleSubmit}>
+      <div className="row" style={{ marginTop: 55 }}>
+        <div className='col-12'>
+      
+      <form className="justify-content-around" style={{display: 'flex', flexDirection: 'row'}} onSubmit={handleSubmit}>
 
-        <label>
+            <label>
+              <h2>Assign Ticket</h2>
+          <p>Assign a tech to the ticket</p>
           Assign To:
-          <select value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
+          <select style={{marginLeft: 15, textAlign:'center'}} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
             <option key='' value=''> Select User... </option>
             {allUsers.map((user, index) => (
               <option key={index} value={user.user_id}> {user.username} </option>
@@ -139,8 +166,10 @@ function TicketInfo() {
           </select>
         </label>
 
-        <h2>Status Update</h2>
-        <label>
+        
+            <label>
+                <h2>Status Update</h2>
+            <p>Update the status of the ticket</p>
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option key='0' value={ticket[0].status}> Select Updated Status... </option>
             <option key='1' value='Open'> Open </option>
@@ -166,16 +195,18 @@ function TicketInfo() {
                 return null;
               }
             })}
-          </ul>
-        </div>
-
-        <label>Updates:
-          <input type="text" value={userUpdates} onChange={(e) => setUserUpdates(e.target.value)} placeholder="Your text here..." />
+              </ul>
+              <br/>
+                  <label>Updates:
+          <input type="text" style={{marginLeft: 10}} value={userUpdates} onChange={(e) => setUserUpdates(e.target.value)} placeholder="Your text here..." />
         </label>
 
-        <button type="submit">Submit</button>
+        <button className="btn btn-dark btn-sm" style={{marginLeft: 10}} type="submit">Submit</button>
+        </div>
 
-      </form>
+        </form>
+        </div>
+        </div>
     </div>
   );
 }
