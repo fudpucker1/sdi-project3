@@ -401,6 +401,98 @@ app.get("/stafftickets", (req, res) => {
     });
 });
 
+// Get all current rows from account_request table
+app.get("/pendingaccountrequest", (req, res) => {
+  knex('account_request')
+    .select('*')
+    .then(data => {
+      if (data.length > 0) {
+          res.status(200).json(data);
+        } else {
+          res.status(404).json({ message: `No pending account request found` });
+        }
+      })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+// Get all current rows from account_request table by ID
+app.get("/pendingaccountrequest/:id", (req, res) => {
+  const { id } = req.params;
+  knex('account_request')
+    .select('*')
+    .where('id', id)
+    .then(data => {
+      if (data.length > 0) {
+          res.status(200).json(data);
+        } else {
+          res.status(404).json({ message: `No pending account request found` });
+        }
+      })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+// Delete account_request based on id
+app.delete("/pendingaccountrequest/:id", (req, res) => {
+  const { id } = req.params;
+  knex('account_request')
+    .where('id', id)
+    .del()
+    .then(() => res.status(200).json({ message: `Pending account request has been denied.` }))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+// Get account_type data
+app.get("/accounttype", (req, res) => {
+  const { accountName } = req.params;
+  knex('user_type')
+    .select('*')
+    .then(data => {
+      if (data.length > 0) {
+        res.status(200).json(data);
+      } else {
+        res.status(404).json({ message: `No user_type data could be found.` });
+      }
+    })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  });
+});
+
+// Post new user into help_desk_users table
+app.post("/createtnewuser", (req, res) => {
+  const {
+    username,
+    password,
+    user_type_id
+  } = req.body;
+
+  const ticketData = {
+    username,
+    password,
+    user_type_id
+  };
+
+  knex("help_desk_users")
+    .insert(ticketData)
+    .then(() => {res.status(201).json({ message: "New user successfully created." });})
+    .catch((error) => {
+      console.error(error);
+      res
+        .status(500)
+        .send("Failed to create new user.");
+    });
+});
+
 
 
 app.listen(port, () => {

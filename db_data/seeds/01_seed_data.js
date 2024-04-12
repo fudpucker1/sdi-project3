@@ -233,4 +233,12 @@ exports.seed = async function(knex, Promise) {
       { help_desk_users_id: 5, ticket_id: 5, body: 'Issue resolved.', date_created: '2024-04-05 12:30:00' }
     ])
   })
+
+  // Inserts pending account request seed entries
+  .then(() => {
+    return knex('account_request').insert([
+      { name: "Luke Brian", email: "luke.brian@spaceforce.mil", accountType: "Admin", userName: "luke.brian", password: "password" },
+      { name: "Mary West", email: "mary.west@spaceforce.mil", accountType: "Admin", userName: "mary.west", password: "password" }
+    ])
+  })
 };
