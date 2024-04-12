@@ -3,8 +3,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import { loggedInContext } from "./Logged-In-context";
 import { useNavigate, Link } from "react-router-dom";
 
+
 export const YourTickets = () => {
-  const { loggedIn, userType, userId } = useContext(loggedInContext);
+  const { refreshToggle, userId } = useContext(loggedInContext);
   const [assignedTickets, setAssignedTickets] = useState([]);
   const navigate = useNavigate();
 
@@ -19,10 +20,9 @@ export const YourTickets = () => {
           )
         );
       });
-  }, []);
+  }, [refreshToggle]);
 
   const handleOnClick = (key) => {
-    console.log("Clicked", key);
     navigate(`/ticket-info/${key}`);
   };
 
@@ -59,6 +59,7 @@ export const YourTickets = () => {
 };
 
 export const UnassignedTickets = () => {
+  const { refreshToggle, setRefreshToggle, userId } = useContext(loggedInContext);
   const [newTickets, setNewTickets] = useState([]);
   const navigate = useNavigate();
 
@@ -68,7 +69,41 @@ export const UnassignedTickets = () => {
       .then((jsoned) => {
         setNewTickets(jsoned.filter((ticket) => ticket.assigned_to === null));
       });
-  }, []);
+  }, [refreshToggle]);
+
+  const handleSubmit = (key) => {
+    const date = new Date();
+    const ticket_update = {
+      status: newTickets.status,
+      date_created: date,
+      body: `Ticket assigned to technician`,
+      help_desk_users_id: userId,
+      ticket_id: key,
+      assigned_to: userId
+    };
+
+    Promise.all([
+      fetch(`http://localhost:8080/tickets`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(ticket_update)
+      })
+        .then(response => response.json())
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); }),
+
+      fetch(`http://localhost:8080/ticket_updates`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(ticket_update)
+      })
+        .then(response => response.json())
+        .then(data => { console.log('Success:', data); })
+        .catch((error) => { console.error('Error:', error); })
+    ])
+      .then(() => setRefreshToggle(!refreshToggle))
+      .catch(error => console.error('Error refreshing page:', error));
+  };
 
   const handleOnClick = (key) => {
     console.log("Clicked", key);
@@ -102,7 +137,7 @@ export const UnassignedTickets = () => {
                 Create Date: {ticket.create_date}
               </p>
             </div>
-            <button variant="primary">Assign To Me</button>
+            <button variant="primary" onClick={() => handleSubmit(ticket.ticket_id)}>Assign To Me</button>
           </>
         );
       })}
