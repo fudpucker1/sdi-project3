@@ -11,6 +11,8 @@ function TicketInfo() {
   const [allUsers, setAllUsers] = useState([]);
   const [isDeleted, setIsDeleted] = useState(false);
   const [status, setStatus] = useState();
+  const [submitted, setSubmitted] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +27,7 @@ function TicketInfo() {
       }
     };
     fetchData();
-  }, [id]);
+  }, [submitted]);
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -38,7 +40,7 @@ function TicketInfo() {
       }
     };
     fetchUpdates();
-  }, []);
+  }, [submitted]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -89,8 +91,10 @@ function TicketInfo() {
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); })
     ])
-      .then(() => window.location.reload(true))
+      //.then(() => window.location.reload(true))
       .catch(error => console.error('Error refreshing page:', error));
+
+      setSubmitted(!submitted);
   };
 
   const handleDelete = () => {
@@ -116,6 +120,7 @@ function TicketInfo() {
       <p>Equipment Type: {ticket[0].type}</p>
       <p>Status: {ticket[0].status}</p>
       <p>Priority: {ticket[0].severity}</p>
+      <p>Assigned To: {ticket[0].username}</p>
 
       {
         isDeleted ? <p>Ticket deleted.</p> : <button onClick={() => handleDelete()}>Delete Ticket</button>
@@ -148,7 +153,7 @@ function TicketInfo() {
           <h2>Ticket Updates</h2>
           <ul>
             {updates.map((update, index) => {
-              if (update.ticket_id === id) {
+              if (update.ticket_id == id) {
                 return (
                   <li key={index}>
                     <p>Date: {update.date_created} </p>
