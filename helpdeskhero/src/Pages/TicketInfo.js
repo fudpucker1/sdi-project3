@@ -11,6 +11,8 @@ function TicketInfo() {
   const [allUsers, setAllUsers] = useState([]);
   const [isDeleted, setIsDeleted] = useState(false);
   const [status, setStatus] = useState();
+  const [submitted, setSubmitted] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +27,7 @@ function TicketInfo() {
       }
     };
     fetchData();
-  }, [id]);
+  }, [submitted]);
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -38,7 +40,7 @@ function TicketInfo() {
       }
     };
     fetchUpdates();
-  }, []);
+  }, [submitted]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -89,8 +91,10 @@ function TicketInfo() {
         .then(data => { console.log('Success:', data); })
         .catch((error) => { console.error('Error:', error); })
     ])
-      .then(() => window.location.reload(true))
+      //.then(() => window.location.reload(true))
       .catch(error => console.error('Error refreshing page:', error));
+
+      setSubmitted(!submitted);
   };
 
   const handleDelete = () => {
@@ -107,9 +111,11 @@ function TicketInfo() {
   }
 
   return (
+
+    <div>
+      <h1>Your ticket ID is: {id}</h1>
     <div style={{ paddingBottom: '50%' }}>
       <h1>Your ticket ID is: {id}</h1>
-
       <h3>Ticket Details</h3>
       <div style={{margin: 15}}>
       <table className="table table-light table-striped" style={{border: '1px solid black', textAlign: 'start'}}>
@@ -120,18 +126,20 @@ function TicketInfo() {
       <th>Equipment Type</th>
       <th>Status</th>
       <th>Priority</th>
+      <th>Assigned To</th>
       <th></th>
       </tr>
       </thead>
       <tbody>
       <tr>
-      
       <td>{ticket[0].customer_name}</td>
       <td>{ticket[0].customer_email}</td>
       <td>{ticket[0].type}</td>
       <td>{ticket[0].status}</td>
       <td>{ticket[0].severity}</td>
+      <td>{ticket[0].username}</td>
       <td style={{textAlign: 'center'}}>
+
       {
         isDeleted ? <p>Ticket deleted.</p> : <button class="btn btn-danger btn-sm" onClick={() => handleDelete()}>Delete Ticket</button>
       }
@@ -174,7 +182,7 @@ function TicketInfo() {
           <h2>Ticket Updates</h2>
           <ul>
             {updates.map((update, index) => {
-              if (update.ticket_id === id) {
+              if (update.ticket_id == id) {
                 return (
                   <li key={index}>
                     <p>Date: {update.date_created} </p>
