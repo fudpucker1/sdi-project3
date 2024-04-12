@@ -29,8 +29,10 @@ function AllTickets() {
 
   const filterTickets = (query) => {
     const filtered = tickets.filter(ticket =>
-      // ticket.ticket_id.toLowerCase().includes(query.toLowerCase()) ||
+      ticket.ticket_id.toString().includes(query.toString()) ||
       // ticket.status.toLowerCase().includes(query.toLowerCase()) ||
+      // ticket.customer_name.toLowerCase().includes(query.toLowerCase()) ||
+      // ticket.username.toLowerCase().includes(query.toLowerCase()) ||
       ticket.severity.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredTickets(filtered);
