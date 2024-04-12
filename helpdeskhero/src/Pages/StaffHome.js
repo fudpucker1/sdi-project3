@@ -12,7 +12,7 @@ function StaffHome() {
   const [isDeleted, setIsDeleted] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
 
-  const { loggedIn, setLoggedIn, setUserType, setUserId } = useContext(loggedInContext);
+  const { loggedIn, setLoggedIn, setUserType, setUserId, userType } = useContext(loggedInContext);
 
   const navigate = useNavigate();
 

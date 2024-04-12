@@ -26,9 +26,9 @@ font-size: large;
 -webkit-transform: translateX(100vw);
 transform: translateX(100vw);
 
--moz-animation: my-animation 35s linear infinite;
--webkit-animation: my-animation 35s linear infinite;
-animation: my-animation 35s linear infinite;
+-moz-animation: my-animation 60s linear infinite;
+-webkit-animation: my-animation 60s linear infinite;
+animation: my-animation 60s linear infinite;
 }
 
 /* for Firefox */
