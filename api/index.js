@@ -157,11 +157,7 @@ app.patch("/updatepassword", (req, res) => {
   knex("help_desk_users")
     .where(`username = ${req.body.username}`)
     .update("password", req.body.password);
-  res.status(201).send("Password updated").cookie();
-});
-
-app.get("/", (req, res) => {
-  res.send("Express is up and running");
+  res.status(201).send("Password updated");
 });
 
 // Trinh search branch
@@ -385,6 +381,27 @@ app.post("/account_request", async (req, res) => {
       }
     });
 });
+
+app.get("/stafftickets", (req, res) => {
+  knex("tickets")
+    .select("*")
+    .join("ticket_type", "tickets.ticket_type_id", "ticket_type.ticket_type_id")
+    .join("equipment", "tickets.equipment_id", "equipment.equipment_id")
+    .join(
+      "priority_levels",
+      "tickets.priority_level_id",
+      "priority_levels.priority_id"
+    )
+    .then((tickets) => {
+      res.status(200).json(tickets);
+    })
+    .catch((error) => {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server is listening to ${port}`);
