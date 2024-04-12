@@ -8,7 +8,7 @@ function StaffHome() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
 
-  const { loggedIn, setLoggedIn, userType, setUserType, userId, setUserId } = useContext(loggedInContext);
+  const { loggedIn, setLoggedIn, setUserType, setUserId } = useContext(loggedInContext);
 
   const navigate = useNavigate();
 
