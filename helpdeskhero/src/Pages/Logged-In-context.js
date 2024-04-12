@@ -7,6 +7,7 @@ export const LoggedInProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [ userType, setUserType ] = useState(0) //1=Admin, 2=Agent, 3=Supervisors, 4=Project Managers, 5=Auditor
   const [ userId, setUserId ] = useState(0)
+  const [ refreshToggle, setRefreshToggle ] = useState(false)
   return (
     <loggedInContext.Provider
       value={{
@@ -15,7 +16,9 @@ export const LoggedInProvider = ({ children }) => {
         userType,
         setUserType,
         userId,
-        setUserId
+        setUserId,
+        refreshToggle,
+        setRefreshToggle
       }}
     >
       {children}
